@@ -16,6 +16,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "node test/script.js"
+    "test": "node test/script.js",
+    "describe": "node test/script.js"
   }
 }

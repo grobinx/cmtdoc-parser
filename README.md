@@ -18,6 +18,10 @@ const cmtDocParser = require('cmtdoc-parser');
 
 console.log(cmtDocParser.describe());
 ```
+or
+```
+npm run describe
+```
 
 The result will be something like this
 ```
