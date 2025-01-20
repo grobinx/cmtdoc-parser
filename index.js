@@ -1169,6 +1169,6 @@ exports.parseFile = function (path, options) {
 //     * @module cmtdoc-parser
 //     */`)
 // );
-console.log(JSON.stringify(exports.parseFile("c:/projekty/mPak/nodejs/cmtdoc-parser/index.js", {under : {name:true}}), null, "\t"));
+//console.log(JSON.stringify(exports.parseFile("c:/projekty/mPak/nodejs/cmtdoc-parser/index.js", {under : {name:true}}), null, "\t"));
 //console.log(JSON.stringify(exports.parseFile("c:/projekty/mPak/nodejs/dbpages/common/assets/libs/dyna-table-1.0.0/dyna-table.js", {under : {name:true}}), null, "\t"));
  
