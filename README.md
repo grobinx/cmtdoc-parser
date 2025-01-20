@@ -6,7 +6,7 @@ This is a simple library that allows you to parse documentation from one comment
 ## Install via npm
 
 ```
-Currently, I don't know how to upload it to npm
+npm install cmtdoc-parser
 ```
 
 ## Library Usage
