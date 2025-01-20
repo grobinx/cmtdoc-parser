@@ -1,0 +1,10 @@
+{
+  "name": "cmtdoc-parser",
+  "version": "1.0.0",
+  "main": ".index.js",
+  "keywords": [],
+  "author": "Andrzej Kałuża",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {}
+}
