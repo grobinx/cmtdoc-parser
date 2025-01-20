@@ -7,7 +7,7 @@ const fs = require("node:fs");
  * 
  * @author Andrzej Kałuża
  * @created 2025-01-16
- * @version 1.0.0 
+ * @version 1.0.1
  * @module cmtdoc-parser
  */
 

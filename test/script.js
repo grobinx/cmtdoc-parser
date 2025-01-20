@@ -1,3 +1,3 @@
-const cmtDocParer = require("cmtdoc-parser");
+const cmtDocParer = require("../index.js");
 
 console.log(cmtDocParer.describe());

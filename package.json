@@ -1,6 +1,6 @@
 {
   "name": "cmtdoc-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Parse single documentation comment like jsdoc or javadoc",
   "keywords": [],
   "homepage": "https://github.com/grobinx/cmtdoc-parser#readme",
@@ -14,7 +14,7 @@
   "license": "MIT",
   "author": "Andrzej Kałuża",
   "type": "commonjs",
-  "main": ".index.js",
+  "main": "index.js",
   "scripts": {
     "test": "node test/script.js"
   }
