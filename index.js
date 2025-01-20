@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 
 /**
- * Parse single documentary comment
+ * Parse single documentation comment like jsdoc or javadoc
  * 
  * I used the resources from the website https://jsdoc.app/ and prepared the regex using the website https://regex101.com/
  * 
