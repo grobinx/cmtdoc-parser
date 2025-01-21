@@ -49,7 +49,7 @@ exports.regexRules = [
         figure : "@param|arg|argument [{type}] [name|[name=value]] [description]",
         description : "The @param tag provides the name, type, and description of a function parameter.",
         example : "@param {string|any[]|*} aid\n@param {string} [alabel_text=abc] if the LABEL is to appear\n@param {attributes} alabel_attrs extra attributes for LABEL\n@param {attributes} aselect_attrs extra attribues for INPUT\n@arg {string=} somebody - Somebody's name.\n@param <V> the value of the element",
-        name : "parameters",
+        name : "param",
         match : /@(param|arg|argument)\b([^\S\r\n]+\{([^{]*)\})?([^\S\r\n]+(([$#_a-zA-Z0-9\.\<\>]+)|\[(([$#_a-zA-Z0-9\.]+)[^\S\r\n]*\=[^\S\r\n]*([$#_a-zA-Z0-9\.]*))\]))?([^\S\r\n]+([^@]*)?)?/g,
         object : "array",
         type : "object",
@@ -71,7 +71,7 @@ exports.regexRules = [
         figure : "@property|prop [{type}] [name|[name=value]] [description]",
         description : "The @property tag is a way to easily document a list of static properties of a class, namespace or other object.",
         example : "@property {object|json} defaults The default values for parties.\n@property {number} defaults.players The default number of players.\n@property {number} defaults.treasure.gold How much gold the party starts with.",
-        name : "properties",
+        name : "property",
         match : /@(property|prop)\b([^\S\r\n]+\{([^{]*)\})?([^\S\r\n]+(([$#_a-zA-Z0-9\.]+)|\[(([$#_a-zA-Z0-9\.]+)[^\S\r\n]*\=[^\S\r\n]*([$#_a-zA-Z0-9\.]*))\]))?([^\S\r\n]+([^@]*)?)?/g,
         object : "array",
         type : "object",
@@ -368,7 +368,7 @@ exports.regexRules = [
         object : "array",
         type : "string",
         captures: {
-            "2": "descriptions"
+            "2": "description"
         }
     },
     {
@@ -389,7 +389,7 @@ exports.regexRules = [
         figure : "@event class_name#[event:]event_name",
         description : "Document an event.",
         example : "@event Hurl#snowball",
-        name : "events",
+        name : "event",
         match : /@(event)\b[^\S\r\n]+([$#_a-zA-Z0-9\.\/]+)\#(([$#_a-zA-Z0-9\.]+)\:)?([$#_a-zA-Z0-9\.\/]+)/g,
         object : "array",
         type : "object",
@@ -450,7 +450,7 @@ exports.regexRules = [
         figure : "@fires|emits class_name#[event:]event_name",
         description : "Describe the events this method may fire.",
         example : "@fires Milkshake#drain",
-        name : "fires",
+        name : "fire",
         match : /@(fires|emits)\b[^\S\r\n]+([$#_a-zA-Z0-9\.\/]+)\#(([$#_a-zA-Z0-9\.]+)\:)?([$#_a-zA-Z0-9\.\/]+)/g,
         object : "array",
         type : "object",
@@ -691,7 +691,7 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@returns [{type}] [description]",
+        figure : "@return|returns [{type}] [description]",
         description : "Document the return value of a function.",
         example : "@returns {number} Sum of a and b",
         name : "returns",
@@ -776,7 +776,7 @@ exports.regexRules = [
         object : "array",
         type : "string",
         captures: {
-            "3": "todos"
+            "3": "todo"
         }
     },
     {
@@ -853,7 +853,7 @@ exports.regexRules = [
         figure : "@change|changed|changelog|modified [YYYY-MM-DD] [<author>] [description]",
         description : "Change log of object.",
         example : "@changed 2025-01-01 <Andrzej Kałuża> some description\n@changed <Andrzej Kałuża> some description\n@changed 2025-01-05 some description",
-        name : "changes",
+        name : "change",
         match : /@(change|changed|changelog|modified)\b([^\S\r\n]*([^\ \<]*))?([^\S\r\n]*(\<(.*)\>))?([^\S\r\n]*([^@]*))?/g,
         object : "array",
         type : "object",
@@ -871,14 +871,14 @@ exports.regexRules = [
         object : "array",
         type : "string",
         captures: {
-            "3": "isues"
+            "3": "isue"
         }
     },
     {
         figure : "@figure|form name([parameters]) [description]",
         description : "Document function form.",
         example : "@figure getData() returns all data as array\n@figure getData(options) returns all data as array\n@figure getData(uniqueId | index | object related with row, options) returns row data as JSON",
-        name : "figures",
+        name : "figure",
         match : /@(figure|form)\b([^\S\r\n]+((\w*)[^\S\r\n]*\([^(]*\)))([^\S\r\n]+([^@]*)?)?/g,
         object : "array",
         type : "object",
