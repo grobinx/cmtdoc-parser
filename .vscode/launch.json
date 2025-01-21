@@ -9,6 +9,12 @@
             "name": "Comment Doc Parser",
             "request": "launch",
             "type": "node-terminal"
+        },
+        {
+            "command": "node ${workspaceFolder}\\test\\script.js",
+            "name": "Test Comment Doc Parser",
+            "request": "launch",
+            "type": "node-terminal"
         }
     ]
 }

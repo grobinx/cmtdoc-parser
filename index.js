@@ -11,6 +11,18 @@ const fs = require("node:fs");
  * @module cmtdoc-parser
  */
 
+regex_postgresql_replace = {
+    "\\b" : "[[:>:]]"
+}
+
+const reCurlyContent = "(\\s*{([^{]*)?})"; // g2 - 2
+const reAngleContent = "(\\s*<([^<]*)>)"; // g2 - 2
+const reSquareContent = "(\\s*\\[([^\\[]*)\\])"; // g2 - 2
+const reParenthContent = "(\\s*\\(([^\\(]*)\\))"; // g2 - 2
+const rePathName = "(\\s+([^\\s@]+))"; // g2 - 2
+const reNameWithDefault = "(\\s*\\[(([^\\[\\=]+)\\s*(\\=\\s*([^\\[]*)?)?)?\\])"; // g3, g5 - 5
+const reDescription = "(\\s*([^@]*)?)"; // g2 - 2
+
 /**
  * Regex rules.
  * You can add your rules to the list
@@ -25,8 +37,6 @@ const fs = require("node:fs");
  * @property {string} type type of object, string, match (boolean true) or object, match set boolean true if figure found
  * @property {json[]} captures is regex group capture number and property name
  * @property {string|json} captures."group_number" regex group witch property if type is string or match
- * @property {string} captures."group_number".name property name
- * @property {any} captures."group_number".default default value if found but is empty
  * @property {json} split if object you can split value
  * @property {string} split."name".name split to property name
  * @property {string} split."name".delimiter delimiter for split
@@ -50,15 +60,15 @@ exports.regexRules = [
         description : "The @param tag provides the name, type, and description of a function parameter.",
         example : "@param {string|any[]|*} aid\n@param {string} [alabel_text=abc] if the LABEL is to appear\n@param {attributes} alabel_attrs extra attributes for LABEL\n@param {attributes} aselect_attrs extra attribues for INPUT\n@arg {string=} somebody - Somebody's name.\n@param <V> the value of the element",
         name : "param",
-        match : /@(param|arg|argument)\b([^\S\r\n]+\{([^{]*)\})?([^\S\r\n]+(([$#_a-zA-Z0-9\.\<\>]+)|\[(([$#_a-zA-Z0-9\.]+)[^\S\r\n]*\=[^\S\r\n]*([$#_a-zA-Z0-9\.]*))\]))?([^\S\r\n]+([^@]*)?)?/g,
+        match : new RegExp("@(param|arg|argument)" +reCurlyContent +"?(" +reNameWithDefault +"|" +rePathName +")?" +reDescription +"?", "g"),
         object : "array",
         type : "object",
         captures: {
             "3" : "type",
-            "6" : "name",
-            "8" : "name",
+            "7" : "name",
             "9" : "default",
-            "11" : "description"
+            "11" : "name",
+            "13" : "description"
         },
         split : {
             "type" : {
@@ -72,15 +82,15 @@ exports.regexRules = [
         description : "The @property tag is a way to easily document a list of static properties of a class, namespace or other object.",
         example : "@property {object|json} defaults The default values for parties.\n@property {number} defaults.players The default number of players.\n@property {number} defaults.treasure.gold How much gold the party starts with.",
         name : "property",
-        match : /@(property|prop)\b([^\S\r\n]+\{([^{]*)\})?([^\S\r\n]+(([$#_a-zA-Z0-9\.]+)|\[(([$#_a-zA-Z0-9\.]+)[^\S\r\n]*\=[^\S\r\n]*([$#_a-zA-Z0-9\.]*))\]))?([^\S\r\n]+([^@]*)?)?/g,
+        match : new RegExp("@(property|prop)" +reCurlyContent +"?(" +reNameWithDefault +"|" +rePathName +")?" +reDescription +"?", "g"),
         object : "array",
         type : "object",
         captures: {
             "3" : "type",
-            "6" : "name",
-            "8" : "name",
+            "7" : "name",
             "9" : "default",
-            "11" : "description"
+            "11" : "name",
+            "13" : "description"
         },
         split : {
             "type" : {
@@ -225,73 +235,90 @@ exports.regexRules = [
         figure : "@access package|private|protected|public",
         description : "Specify the access level of this member (private, package-private, public, or protected).",
         example : "@access package",
-        match : /@access[^\S\r\n]+(package|private|protected|public)\b/g,
+        match : /@(access)\s+(package|private|protected|public)\b/g,
         object : "property",
         type : "string",
         captures: {
-            "1": "access"
+            "2": "access"
         }
     },
     {
-        figure : "@alias aliasNamepath",
+        figure : "@alias path [description]",
         description : "Treat a member as if it had a different name.",
         example : "@alias trackr.CookieManager",
-        match : /@alias[^\S\r\n]+(.*)/g,
+        name : "alias",
+        match : new RegExp("@(alias)" +rePathName +reDescription +"?", "g"),
         object : "property",
-        type : "string",
+        type : "object",
         captures: {
-            "1": "alias"
+            "3": "path",
+            "5": "description"
         }
     },
     {
-        figure : "@augments|extends namepath",
+        figure : "@augments|extends path [description]",
         description : "Indicate that a symbol inherits from, and adds to, a parent symbol.",
         example : "@augments Animal",
-        match : /@(augments|extends)[^\S\r\n]+(.*)/g,
-        object : "property",
-        type : "string",
+        name : "augments",
+        match : new RegExp("@(augments|extends)" +rePathName +reDescription +"?", "g"),
+        object : "array",
+        type : "object",
         captures: {
-            "2": "augments"
+            "3": "path",
+            "5": "description"
         }
     },
     {
-        figure : "@author author [<email@address>] [(http-page)]",
+        figure : "@author author [<email@address>] [(http-page)] [- description]",
         description : "Identify the author of an item.",
-        example : "@author Andrzej Kałuża <aaa@server.pl> (http:\\page)",
+        example : "@author Andrzej Kałuża <aaa@server.pl> (http:\\page)\n@author Juliusz Cezar - I down't now way",
         name : "author",
-        match : /@author([^\S\r\n]+([^\<\(\n]+))([^\S\r\n]*\<(.*)\>)?([^\S\r\n]*\((.*)\))?/g,
-        object : "property",
+        match : new RegExp("@(author)(\\s+([^<\\(@\-]+))" +reAngleContent +"?" +reParenthContent +"?" +"(\\s*\\-" +reDescription +"?)?", "g"),
+        object : "array",
         type : "object",
         captures: {
-            "2": "author",
-            "4": "email",
-            "6": "page"
+            "3": "author",
+            "5": "email",
+            "7": "page",
+            "10": "description"
         }
     },
     {
-        figure : "@borrows thas_namepath as this_namepath",
+        figure : "@borrows thas_namepath as this_namepath [description]",
         description : "This object uses something from another object.",
-        example : "@borrows trstr as trim",
+        example : "@borrows trim as myTrime",
         name : "borrows",
-        match : /@borrows[^\S\r\n]+([$#_a-zA-Z0-9\.]+)[^\S\r\n]*as[^\S\r\n]*([$#_a-zA-Z0-9\.]+)/g,
+        match : new RegExp("@(borrows)" +rePathName +"\\s*as\\s*" +rePathName +reDescription +"?", "g"),
         object : "property",
         type : "object",
         captures: {
-            "1": "that",
-            "2": "this"
+            "3": "that",
+            "5": "this",
+            "7": "description"
         }
     },
     {
-        figure : "@class|constructor {type} [name]",
+        figure : "@class|constructor [{type}] name",
         description : "This function is intended to be called with the \"new\" keyword.",
         example : "@class {Person} Human",
         name : "class",
-        match : /@(constructor|class)\b([^\S\r\n]+(\{([^{]*)\})?([^\S\r\n]*(.*))?)/g,
+        match : new RegExp("@(constructor|class)" +reCurlyContent +"?" +rePathName, "g"),
         object : "property",
         type : "object",
         captures: {
-            "4": "type",
-            "6": "name"
+            "3": "type",
+            "5": "name"
+        }
+    },
+    {
+        figure : "@class|constructor",
+        description : "This function is intended to be called with the \"new\" keyword.",
+        example : "@class",
+        match : /@(constructor|class)\b/g,
+        object : "property",
+        type : "match",
+        captures: {
+            "1": "class"
         }
     },
     {
@@ -299,136 +326,164 @@ exports.regexRules = [
         description : "The @constant tag is used to mark the documentation as belonging to a symbol that is a constant.",
         example : "@constant {number}",
         name : "constant",
-        match : /@(constant|const)\b([^\S\r\n]+(\{([^{]*)\})([^\S\r\n]*(.*))?)/g,
+        match : new RegExp("@(constant|const)" +reCurlyContent +rePathName +"?", "g"),
         object : "property",
         type : "object",
         captures: {
-            "4": "type",
-            "6": "name"
+            "3": "type",
+            "5": "name"
         }
     },
     {
-        figure : "@constructs [name]",
+        figure : "@constructs name",
         description : "This function member will be the constructor for the previous class.",
         example : "@constructs Menu",
-        match : /@(constructs)\b([^\S\r\n]+([$#_a-zA-Z0-9\.\/]+))?/g,
+        match : new RegExp("@(constructs)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
-            "3": {
-                name : "constructs",
-                default : true
-            }
+            "3": "constructs"
+        }
+    },
+    {
+        figure : "@constructs name",
+        description : "This function member will be the constructor for the previous class.",
+        example : "@constructs",
+        match : /@(constructs)/g,
+        object : "property",
+        type : "match",
+        captures: {
+            "1": "constructs"
         }
     },
     {
         figure : "@copyright some copyright text",
         description : "Document some copyright information.",
         example : "@copyright Andrzej Kałuża 2025",
-        match : /@copyright[^\S\r\n]([^@]*)/g,
+        match : new RegExp("@(copyright)" +reDescription, "g"),
         object : "property",
         type : "string",
         captures: {
-            "1": "copyright"
+            "3": "copyright"
         }
     },
     {
-        figure : "@default [some value]",
+        figure : "@default value",
         description : "Document the default value.",
+        example : "@default 'Ex25622'",
+        match : new RegExp("@(default|defaultvalue)" +rePathName, "g"),
+        object : "property",
+        type : "string",
+        captures: {
+            "3": "default"
+        }
+    },
+    {
+        figure : "@default",
+        description : "Document the default.",
         example : "@default",
-        match : /@(default|defaultvalue)\b([^\S\r\n]+(.*))?/g,
+        match : /@(default|defaultvalue)\b/g,
         object : "property",
-        type : "string",
+        type : "match",
         captures: {
-            "3": {
-                name : "default",
-                default : true
-            }
+            "1": "default"
         }
     },
     {
-        figure : "@deprecated [some text]",
+        figure : "@deprecated some text",
         description : "Document that this is no longer the preferred way.",
-        example : "@deprecated since version 2.0\nuse other function",
-        match : /@deprecated[^\S\r\n]([^@]*)/g,
+        example : "@deprecated since version 2.0 use other function",
+        match : new RegExp("@(deprecated)" +reDescription, "g"),
         object : "property",
         type : "string",
         captures: {
-            "1": {
-                name : "deprecated",
-                default : true
-            }
+            "3": "deprecated"
         }
     },
     {
-        figure : "@description some description",
+        figure : "@deprecated",
+        description : "Document that this is no longer the preferred way.",
+        example : "@deprecated",
+        match : /@(deprecated)\b/g,
+        object : "property",
+        type : "match",
+        captures: {
+            "1": "deprecated"
+        }
+    },
+    {
+        figure : "@description|desc|classdesc some description",
         description : "Describe a symbol.",
         example : "@description Add two numbers.",
-        match : /@(description|desc|classdesc)[^\S\r\n]([^@]*)/g,
+        match : new RegExp("@(description|desc|classdesc)" +reDescription, "g"),
         object : "array",
         type : "string",
         captures: {
-            "2": "description"
+            "3": "description"
         }
     },
     {
-        figure : "@enum [{type}]",
+        figure : "@enum {type} [name]",
         description : "Document a collection of related properties.",
         example : "@enum {number}",
-        match : /@(enum)\b([^\S\r\n]+(\{([^{]*)\}))?/g,
+        match : new RegExp("@(enum)" +reCurlyContent +rePathName +"?", "g"),
         object : "property",
         type : "string",
         captures: {
-            "4": {
-                name : "enum",
-                default : true
-            }
+            "3": "enum",
+            "5": "name"
         }
     },
     {
-        figure : "@event class_name#[event:]event_name",
+        figure : "@enum",
+        description : "Document a collection of related properties.",
+        example : "@enum {number}",
+        match : /@(enum)\b/g,
+        object : "property",
+        type : "match",
+        captures: {
+            "1": "enum"
+        }
+    },
+    {
+        figure : "@event event_name",
         description : "Document an event.",
         example : "@event Hurl#snowball",
         name : "event",
-        match : /@(event)\b[^\S\r\n]+([$#_a-zA-Z0-9\.\/]+)\#(([$#_a-zA-Z0-9\.]+)\:)?([$#_a-zA-Z0-9\.\/]+)/g,
+        match : new RegExp("@(event)" +rePathName, "g"),
         object : "array",
-        type : "object",
+        type : "string",
         captures: {
-            "2": "className",
-            "4": "event",
-            "5": "eventName"
+            "3": "event"
         }
     },
     {
         figure : "@example multiline example, code, comments, etc",
         description : "Provide an example of how to use a documented item.",
         example : " @example\n// returns 2\nglobalNS.method1(5, 10);\n@example\n// returns 3\nglobalNS.method(5, 15);",
-        match : /@(example)([^@]*)/g,
+        match : new RegExp("@(example)" +reDescription, "g"),
         object : "array",
         type : "string",
         captures: {
-            "2": "examples"
+            "2": "example"
         }
     },
     {
-        figure : "@exports [module_name]",
+        figure : "@exports name",
         description : "Identify the member that is exported module.",
-        example : "",
-        match : /@(exports)\b([^\S\r\n]+([$#_a-zA-Z0-9\.\/\:\-]+))?/g,
+        example : "@exports Privare",
+        match : new RegExp("@(exports)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
-            "3": {
-                name : "exports",
-                default : true
-            }
+            "3": "exports"
         }
     },
     {
-        figure : "@external|host name of external>",
+        figure : "@external|host name_of_external",
         description : "Identifies an external class, namespace, or module.",
         example : "@external \"jQuery.fn\"",
-        match : /@(external|host)\b([^\S\r\n]+(.*))/g,
+        match : new RegExp("@(external|host)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -439,7 +494,7 @@ exports.regexRules = [
         figure : "@file some description",
         description : "Describe a file.",
         example : "@file Manages the configuration settings for the widget.",
-        match : /@(file|fileoverview|overview)\b([^\S\r\n]+([^@]*))?/g,
+        match : new RegExp("@(file|fileoverview|overview)" +reDescription, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -447,63 +502,77 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@fires|emits class_name#[event:]event_name",
+        figure : "@fires|emits event_name",
         description : "Describe the events this method may fire.",
         example : "@fires Milkshake#drain",
         name : "fire",
-        match : /@(fires|emits)\b[^\S\r\n]+([$#_a-zA-Z0-9\.\/]+)\#(([$#_a-zA-Z0-9\.]+)\:)?([$#_a-zA-Z0-9\.\/]+)/g,
+        match : new RegExp("@(fires|emits)" +rePathName, "g"),
         object : "array",
-        type : "object",
+        type : "string",
         captures: {
-            "2": "className",
-            "4": "event",
-            "5": "eventName"
+            "3": "event"
         }
     },
     {
-        figure : "@function|func|method [function_name]",
+        figure : "@function|func|method name",
         description : "Describe a function or method.",
         example : "@function myFunction",
-        match : /@(function|func|method)\b([^\S\r\n]+([$#_a-zA-Z0-9\.\/]+))?/g,
+        match : new RegExp("@(function|func|method)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
-            "3": {
-                name : "function",
-                default : true
-            }
+            "3": "function"
+        }
+    },
+    {
+        figure : "@function|func|method",
+        description : "Set a function or method.",
+        example : "@function",
+        match : /@(function|func|method)\b/g,
+        object : "property",
+        type : "match",
+        captures: {
+            "1": "function"
         }
     },
     {
         figure : "@implements {type}",
         description : "This symbol implements an interface.",
         example : "@implements {Color}",
-        match : /@(implements)\b([^\S\r\n]+(\{([^{]*)\}))/g,
+        match : new RegExp("@(implements)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
-            "4": "implements"
+            "3": "implements"
         }
     },
     {
-        figure : "@interface [name]",
+        figure : "@interface name",
         description : "This symbol is an interface that others can implement.",
         example : "@interface Color",
-        match : /@(interface)\b([^\S\r\n]+(.*))?/g,
+        match : new RegExp("@(interface)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
-            "3": {
-                name : "interface",
-                default : true
-            }
+            "3": "interface"
         }
     },
     {
-        figure : "@created date of some description",
-        description : "Date creation or some description",
+        figure : "@interface",
+        description : "Set as interface that others can implement.",
+        example : "@interface",
+        match : /@(interface)\b/g,
+        object : "property",
+        type : "match",
+        captures: {
+            "1": "interface"
+        }
+    },
+    {
+        figure : "@created date",
+        description : "Date creation",
         example : "@created 2025-01-17",
-        match : /@(created)\b([^\S\r\n]+([^@]*))/g,
+        match : new RegExp("@(created)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -514,18 +583,18 @@ exports.regexRules = [
         figure : "@kind class|constant|event|external|file|function|member|mixin|module|namespace|typedef",
         description : "What kind of symbol is this?",
         example : "@kind class",
-        match : /@kind[^\S\r\n]+(class|constant|event|external|file|function|member|mixin|module|namespace|typedef)\b/g,
+        match : /@(kind)\s+(class|constant|event|external|file|function|member|mixin|module|namespace|typedef)\b/g,
         object : "property",
         type : "string",
         captures: {
-            "1": "kind"
+            "2": "kind"
         }
     },
     {
-        figure : "@lends name_path",
+        figure : "@lends path",
         description : "Document properties on an object literal as if they belonged to a symbol with a given name.",
         example : "@lends Person.prototype",
-        match : /@(lends)\b([^\S\r\n]+([$#_a-zA-Z0-9\.\/\:]+))/g,
+        match : new RegExp("@(lends)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -536,42 +605,42 @@ exports.regexRules = [
         figure : "@license identifier|standalone multiline text",
         description : "Identify the license that applies to this code.",
         example : "@license\nThe MIT License is a permissive software license originating at the Massachusetts Institute of Technology (MIT)[6] in the late 1980s.[7] As a permissive license, it puts very few restrictions on reuse and therefore has high license compatibility.[8][9]\nUnlike copyleft software licenses, the MIT License also permits reuse within proprietary software, provided that all copies of the software or its substantial portions include a copy of the terms of the MIT License and also a copyright notice.[9][10] In 2015, the MIT License was the most popular software license on GitHub,[11] and was still the most popular in 2024.[12]\nNotable projects that use the MIT License include the X Window System, Ruby on Rails, Node.js, Lua, jQuery, .NET, Angular, and React. ",
-        match : /@(license)([^@]*)/g,
+        match : new RegExp("@(license)" +reDescription, "g"),
         object : "property",
         type : "string",
         captures: {
-            "2": "license"
+            "3": "license"
         }
     },
     {
         figure : "@listens event_name",
         description : "List the events that a symbol listens for.",
         example : "@listens module:hurler~event:snowball",
-        match : /@(listens)\b([^\S\r\n]+(.*))/g,
-        object : "property",
+        match : new RegExp("@(listens)" +rePathName, "g"),
+        object : "array",
         type : "string",
         captures: {
             "3": "listens"
         }
     },
     {
-        figure : "@member|var|variable [{type}] [name]",
+        figure : "@member|var|variable {type} [name]",
         description : "Document a member.",
         example : "",
         name : "variable",
-        match : /@(var|variable|member)\b([^\S\r\n]+(\{([^{]*)\})?([^\S\r\n]*([$#_a-zA-Z0-9\.\/]+))?)?/g,
+        match : new RegExp("@(var|variable|member)" +reCurlyContent +rePathName +"?", "g"),
         object : "property",
         type : "object",
         captures: {
-            "4": "type",
-            "6": "name"
+            "3": "type",
+            "5": "name"
         }
     },
     {
-        figure : "@memberof[!] parent_name_path",
+        figure : "@memberof[!] name",
         description : "This symbol belongs to a parent symbol.",
         example : "@memberof Tools",
-        match : /@(memberof|memberof\!)\b([^\S\r\n]+([$#_a-zA-Z0-9\.\/\:]+))/g,
+        match : new RegExp("@(memberof|memberof\!)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -582,7 +651,7 @@ exports.regexRules = [
         figure : "@mixes other_object_path",
         description : "This object mixes in all the members from another object.",
         example : "@mixes Eventful",
-        match : /@(mixes)\b([^\S\r\n]+([$#_a-zA-Z0-9\.\/]+))/g,
+        match : new RegExp("@(mixes)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -590,50 +659,77 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@mixin [mixin_name]",
+        figure : "@mixin name",
         description : "Document a mixin object.",
         example : "@mixin",
-        match : /@(mixin)\b([^\S\r\n]+([$#_a-zA-Z0-9\.\/]+))?/g,
+        match : new RegExp("@(mixin)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
-            "3": {
-                name : "mixin",
-                default : true
-            }
+            "3": "mixin"
         }
     },
     {
-        figure : "@module [{type}] [moduleName]",
-        description : "Document a module.",
-        example : "@module {Query} MyModule",
-        name : "module",
-        match : /@(module)\b([^\S\r\n]+(\{([^{]*)\})?([^\S\r\n]*([$#_a-zA-Z0-9\.\/\-\"\:\.]+))?)/g,
+        figure : "@mixin",
+        description : "Document a mixin object.",
+        example : "@mixin",
+        match : /@(mixin)\b/g,
         object : "property",
-        type : "object",
+        type : "match",
         captures: {
-            "4": "type",
-            "6": "name"
+            "1": "mixin"
         }
     },
     {
-        figure : "@namespace [{type}] [moduleName]",
+        figure : "@module name",
+        description : "Document a module.",
+        example : "@module MyModule",
+        match : new RegExp("@(module)" +rePathName, "g"),
+        object : "property",
+        type : "string",
+        captures: {
+            "3": "module"
+        }
+    },
+    {
+        figure : "@module",
+        description : "Document a module.",
+        example : "@module",
+        match : /@(module)\b/g,
+        object : "property",
+        type : "match",
+        captures: {
+            "1": "module"
+        }
+    },
+    {
+        figure : "@namespace name",
         description : "Document a namespace object.",
         example : "@namespace MyNamespace",
-        name : "namespace",
-        match : /@(namespace)\b([^\S\r\n]+(\{([^{]*)\})?([^\S\r\n]*([$#_a-zA-Z0-9\.\/]+))?)?/g,
+        match : new RegExp("@(namespace)" +rePathName, "g"),
         object : "property",
-        type : "object",
+        type : "string",
         captures: {
-            "4": "type",
-            "6": "name"
+            "3": "namespace"
         }
     },
     {
-        figure : "@name name_path",
+        figure : "@namespace",
+        description : "Set a namespace object.",
+        example : "@namespace",
+        name : "namespace",
+        match : /@(namespace)\b/g,
+        object : "property",
+        type : "match",
+        captures: {
+            "1": "namespace"
+        }
+    },
+    {
+        figure : "@name name",
         description : "Document the name of an object.",
         example : "@name highlightSearchTerm",
-        match : /@(name)\b([^\S\r\n]+([$#_a-zA-Z0-9\.\/\:]+))/g,
+        match : new RegExp("@(name)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -641,49 +737,76 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@package [{type_expression}]",
+        figure : "@package {type}",
         description : "This symbol is meant to be package-private.",
         example : "@package",
-        match : /@(package)\b([^\S\r\n]+(\{([^{]*)\}))?/g,
+        match : new RegExp("@(package)" +reCurlyContent, "g"),
         object : "property",
         type : "string",
         captures: {
-            "4": {
-                name : "package",
-                default : true
-            }
+            "3": "package"
         }
     },
     {
-        figure : "@private [{type_expression}]",
+        figure : "@package",
+        description : "This symbol is meant to be package-private.",
+        example : "@package",
+        match : /@(package)\b/g,
+        object : "property",
+        type : "match",
+        captures: {
+            "1": "package"
+        }
+    },
+    {
+        figure : "@private {type}",
+        description : "This symbol is meant to be private.",
+        example : "@private {integer}",
+        match : new RegExp("@(private)" +reCurlyContent, "g"),
+        object : "property",
+        type : "string",
+        captures: {
+            "3": "private"
+        }
+    },
+    {
+        figure : "@private",
         description : "This symbol is meant to be private.",
         example : "@private",
-        match : /@(private)\b([^\S\r\n]+(\{([^{]*)\}))?/g,
+        match : /@(private)\b/g,
         object : "property",
-        type : "string",
+        type : "match",
         captures: {
-            "4": {
-                name : "private",
-                default : true
-            }
+            "1": "private"
         }
     },
     {
-        figure : "@protected [{type_expression}]",
+        figure : "@protected {type}",
+        description : "This symbol is meant to be protected.",
+        example : "@protected {Number}",
+        match : new RegExp("@(protected)" +reCurlyContent, "g"),
+        object : "property",
+        type : "string",
+        captures: {
+            "3": "protected"
+        }
+    },
+    {
+        figure : "@protected",
         description : "This symbol is meant to be protected.",
         example : "@protected",
-        match : /@(protected)\b([^\S\r\n]+(\{([^{]*)\}))?/g,
+        match : /@(protected)\b/g,
         object : "property",
-        type : "string",
+        type : "match",
         captures: {
-            "4": "protected"
+            "1": "protected"
         }
     },
     {
-        figure : "@requires some_module_name>",
+        figure : "@requires module_name",
         description : "This file requires a JavaScript module.",
         example : "@requires module:xyzcorp/helper\n@requires xyzcorp/helper.ShinyWidget#polish",
-        match : /@(requires)\b([^\S\r\n]+([$#_a-zA-Z0-9\.\/\:\|\@]+))/g,
+        match : new RegExp("@(requires)" +rePathName, "g"),
         object : "array",
         type : "string",
         captures: {
@@ -691,16 +814,16 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@return|returns [{type}] [description]",
+        figure : "@return|returns {type} [description]",
         description : "Document the return value of a function.",
         example : "@returns {number} Sum of a and b",
         name : "returns",
-        match : /@(returns|return)\b([^\S\r\n]+(\{([^{]*)\})?([^\S\r\n]*([^@]*))?)?/g,
+        match : new RegExp("@(returns|return)" +reCurlyContent +reDescription +"?", "g"),
         object : "property",
         type : "object",
         captures: {
-            "4": "type",
-            "6": "description"
+            "3": "type",
+            "5": "description"
         },
         split : {
             "type" : {
@@ -710,23 +833,24 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@see [{@link namepath}|namepath] [description]",
+        figure : "@see {@link namepath}|namepath [description]",
         description : "Refer to some other documentation for more information.",
-        example : "@see {@link bar}\n@see bar\n@see {@link foo} for further information.\n@see {@link http://github.com|GitHub}\n@see <a href=\"http://www.link_to_jira/HERO-402\">HERO-402</a>\n@see package.Class#method(Type argname, Type argname,...)",
+        example : "@see {@link bar}\n@see bar\n@see {@link foo} for further information.\n@see {@link http://github.com|GitHub}\n@see package.Class#method",
         name : "see",
-        match : /@(see)\s*((\{[^{]+\})|([!#&$_\-\.\\\/\:\w]+)(\s*\([^(]*\))?)?\s*([^@]*)?/g,
+        match : new RegExp("@(see)(" +reCurlyContent +"|" +rePathName +")" +reDescription +"?", "g"),
         object : "array",
         type : "object",
         captures: {
-            "2": "path",
-            "6": "description"
+            "4": "path",
+            "6": "path",
+            "8": "description"
         }
     },
     {
-        figure : "@since version description",
+        figure : "@since version",
         description : "When was this feature added?",
         example : "@since 1.0.1",
-        match : /@(since)\b([^\S\r\n]+([^@]*))/g,
+        match : new RegExp("@(since)" +reDescription, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -734,10 +858,10 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@summary some description",
+        figure : "@summary description",
         description : "A shorter version of the full description.",
         example : "@summary A concise summary.",
-        match : /@(summary)\b([^\S\r\n]+([^@]*))/g,
+        match : new RegExp("@(summary)" +reDescription, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -748,7 +872,7 @@ exports.regexRules = [
         figure : "@this namePath",
         description : "What does the 'this' keyword refer to here?",
         example : "@this Greeter",
-        match : /@(this)\b([^\S\r\n]+((.*)))/g,
+        match : new RegExp("@(this)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -756,23 +880,23 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@throws|exception [{type}] [free-form description]",
+        figure : "@throws|exception {type} [description]",
         description : "Describe what errors could be thrown.",
         example : "@throws {InvalidArgumentException}\n@throws Will throw an error if the argument is null.\n@throws {DivideByZero} Argument x must be non-zero.",
         name : "throws",
-        match : /@(throws|exception)\b([^\S\r\n]+(\{([^{]*)\})?([^\S\r\n]*([^@]*))?)?/g,
+        match : new RegExp("@(throws|exception)" +reCurlyContent +reDescription +"?", "g"),
         object : "array",
         type : "object",
         captures: {
-            "4": "type",
-            "6": "description"
+            "3": "type",
+            "5": "description"
         }
     },
     {
         figure : "@todo text describing thing to do.",
         description : "Document tasks to be completed.",
         example : "@todo Write the documentation.\n@todo Implement this function.",
-        match : /@(todo)\b([^\S\r\n]+([^@]*))?/g,
+        match : new RegExp("@(todo)" +reDescription, "g"),
         object : "array",
         type : "string",
         captures: {
@@ -780,45 +904,46 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@typedef [{type}] [namepath]",
+        figure : "@typedef [{type}] name",
         description : "Document a custom type.",
         example : "@typedef {(number|string)} NumberLike\n@typedef {Object} WishGranter~Triforce",
         name : "typedef",
-        match : /@(typedef)\b([^\S\r\n]+(\{([^{]*)\})?([^\S\r\n]*(.*))?)?/g,
+        match : new RegExp("@(typedef)" +reCurlyContent +"?" +rePathName, "g"),
         object : "property",
         type : "object",
         captures: {
-            "4": "type",
-            "6": "name"
+            "3": "type",
+            "5": "name"
         }
     },
     {
-        figure : "@tutorial tutorial-name or link",
+        figure : "@tutorial {@link path}|name",
         description : "Insert a link to an included tutorial file.",
-        example : "@tutorial tutorial-1",
-        match : /@(tutorial)\b([^\S\r\n]+(.*))/g,
-        object : "property",
+        example : "@tutorial tutorial-1\n@tutorial {@link index.js}",
+        match : new RegExp("@(tutorial)(" +reCurlyContent +"|" +rePathName +")", "g"),
+        object : "array",
         type : "string",
         captures: {
-            "3": "tutorial"
+            "4": "tutorial",
+            "6": "tutorial"
         }
     },
     {
         figure : "@type {type}",
         description : "Document the type of an object.",
-        example : "@type {(string|Array.<string>)}\n@type {number}",
-        match : /@(type)\b([^\S\r\n]+(\{([^{]*)\}))/g,
+        example : "@type {Array.<string>}\n@type {number}",
+        match : new RegExp("@(type)" +reCurlyContent, "g"),
         object : "property",
         type : "string",
         captures: {
-            "4": "type"
+            "3": "type"
         }
     },
     {
         figure : "@variation number",
         description : "Distinguish different objects with the same name.",
         example : "@variation 2",
-        match : /@(variation)\b([^\S\r\n]+([$#_a-zA-Z0-9\.\/\:]+))/g,
+        match : new RegExp("@(variation)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -826,10 +951,10 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@version version description",
+        figure : "@version version",
         description : "Documents the version number of an item.",
         example : "@version 1.0.45\n@version 0.0.1 Beta",
-        match : /@(version)\b([^\S\r\n]+([^@]*))/g,
+        match : new RegExp("@(version)" +reDescription, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -839,14 +964,14 @@ exports.regexRules = [
     {
         figure : "@yield|yields|next [{type}] [description]",
         description : "Document the value yielded by a generator function.",
-        example : "@yields {number}\n@yields {number} The next number in the Fibonacci sequence.]\n@yield record of tabel \"customers\"",
+        example : "@yields {number}\n@yields {number} The next number in the Fibonacci sequence.]",
         name : "yield",
-        match : /@(yield|yields|next)\b([^\S\r\n]+(\{([^{]*)\})?([^\S\r\n]*([^@]*))?)?/g,
+        match : new RegExp("@(yield|yields|next)" +reCurlyContent +"?" +reDescription +"?", "g"),
         object : "property",
         type : "object",
         captures: {
-            "4": "type",
-            "6": "description"
+            "3": "type",
+            "5": "description"
         }
     },
     {
@@ -854,7 +979,7 @@ exports.regexRules = [
         description : "Change log of object.",
         example : "@changed 2025-01-01 <Andrzej Kałuża> some description\n@changed <Andrzej Kałuża> some description\n@changed 2025-01-05 some description",
         name : "change",
-        match : /@(change|changed|changelog|modified)\b([^\S\r\n]*([^\ \<]*))?([^\S\r\n]*(\<(.*)\>))?([^\S\r\n]*([^@]*))?/g,
+        match : new RegExp("@(change|changed|changelog|modified)" +rePathName +"?" +reAngleContent +"?" +reDescription +"?", "g"),
         object : "array",
         type : "object",
         captures: {
@@ -867,7 +992,7 @@ exports.regexRules = [
         figure : "@isue some description",
         description : "Describes the problem in the code.",
         example : "@isue sometimes returns null\n@isue link not work",
-        match : /@(isue)\b([^\S\r\n]+([^@]*))/g,
+        match : new RegExp("@(isue)" +reDescription, "g"),
         object : "array",
         type : "string",
         captures: {
@@ -879,12 +1004,12 @@ exports.regexRules = [
         description : "Document function form.",
         example : "@figure getData() returns all data as array\n@figure getData(options) returns all data as array\n@figure getData(uniqueId | index | object related with row, options) returns row data as JSON",
         name : "figure",
-        match : /@(figure|form)\b([^\S\r\n]+((\w*)[^\S\r\n]*\([^(]*\)))([^\S\r\n]+([^@]*)?)?/g,
+        match : new RegExp("@(figure|form)(" +rePathName +reParenthContent +")" +reDescription +"?", "g"),
         object : "array",
         type : "object",
         captures: {
-            "3": "figure",
-            "6": "description"
+            "2": "figure",
+            "7": "description"
         }
     }
 ]
@@ -951,13 +1076,8 @@ exports.walk = function (str, callback, options) {
                             }
                             let obj = {};
                             for (let [key, name] of Object.entries(regex.captures)) {
-                                if (typeof name === "string") {
-                                    if ((captures[key] ?? "").trim() !== "") {
-                                        obj[name] = captures[key].trim();
-                                    }
-                                }
-                                else {
-                                    obj[name.name] = (captures[key] ?? "").trim() !== "" ? captures[key].trim() : name.default;
+                                if ((captures[key] ?? "").trim() !== "") {
+                                    obj[name] = captures[key].trim();
                                 }
                             }
                             if ("split" in regex) {
@@ -972,19 +1092,11 @@ exports.walk = function (str, callback, options) {
                         }
                         case "string": {
                             for (let [key, name] of Object.entries(regex.captures)) {
-                                if (typeof name === "string") {
-                                    if ((captures[key] ?? "").trim() !== "") {
-                                        if (!(name in figure)) {
-                                            figure[name] = [];
-                                        }
-                                        figure[name].push(captures[key].trim());
+                                if ((captures[key] ?? "").trim() !== "") {
+                                    if (!(name in figure)) {
+                                        figure[name] = [];
                                     }
-                                }
-                                else if (typeof name === "object") {
-                                    if (!(name.name in figure)) {
-                                        figure[name.name] = [];
-                                    }
-                                    figure[name.name].push((captures[key] ?? "").trim() !== "" ? captures[key].trim() : name.default);
+                                    figure[name].push(captures[key].trim());
                                 }
                             }
                             break;
@@ -997,13 +1109,8 @@ exports.walk = function (str, callback, options) {
                         case "object": {
                             let obj = {};
                             for (let [key, name] of Object.entries(regex.captures)) {
-                                if (typeof name === "string") {
-                                    if ((captures[key] ?? "").trim() !== "") {
-                                        obj[name] = captures[key].trim();
-                                    }
-                                }
-                                else if (typeof name === "object") {
-                                    obj[name.name] = (captures[key] ?? "").trim() !== "" ? captures[key].trim() : name.default;
+                                if ((captures[key] ?? "").trim() !== "") {
+                                    obj[name] = captures[key].trim();
                                 }
                             }
                             if ("split" in regex) {
@@ -1018,13 +1125,8 @@ exports.walk = function (str, callback, options) {
                         }
                         case "string": {
                             for (let [key, name] of Object.entries(regex.captures)) {
-                                if (typeof name === "string") {
-                                    if ((captures[key] ?? "").trim() !== "") {
-                                        figure[name] = captures[key].trim();
-                                    }
-                                }
-                                else if (typeof name === "object") {
-                                    figure[name.name] = (captures[key] ?? "").trim() !== "" ? captures[key].trim() : name.default;
+                                if ((captures[key] ?? "").trim() !== "") {
+                                    figure[name] = captures[key].trim();
                                 }
                             }
                             break;
@@ -1092,6 +1194,7 @@ exports.describe = function (options) {
         result += 
             "Figure: " +regex.figure +"\n" +
             regex.description +"\n" +
+            "Match:" +regex.match.source +"\n" +
             "Kind: " +regex.object +" of " +regex.type +
             "\nExample:\n" +regex.example +
             "\nResult:\n" +JSON.stringify(figure, null, "\t");
