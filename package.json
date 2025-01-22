@@ -2,7 +2,7 @@
   "name": "cmtdoc-parser",
   "version": "1.1.5",
   "description": "Parse single documentation comment like jsdoc or javadoc",
-  "keywords": ["jsdoc", "documentation"],
+  "keywords": ["jsdoc", "documentation", "comment"],
   "homepage": "https://github.com/grobinx/cmtdoc-parser#readme",
   "bugs": {
     "url": "https://github.com/grobinx/cmtdoc-parser/issues"
