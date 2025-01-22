@@ -1,7 +1,8 @@
 # Comment Doc Parser
 
-A Node.js library to parse documentation comments.<br>
-This is a simple library that allows you to parse documentation from one comment.
+A Node.js library to parse documentation comments.<br />
+This is a simple library that allows you to parse documentation from one comment.<br />
+This module made for parse documentation comments in DPAG template files dedicated DBPAGES web application server.
 
 ## Install via npm
 
@@ -9,7 +10,7 @@ This is a simple library that allows you to parse documentation from one comment
 npm install cmtdoc-parser
 ```
 
-## Library Usage
+## Library usage
 
 ### Describe supported figures
 
@@ -121,6 +122,8 @@ The result will be something like this
 }
 ```
 
+## Extensions usage
+
 ### Parse single file
 
 This is a simple function that finds and processes comments documenting in file.<br>
@@ -129,8 +132,9 @@ This function add property "under" for each found comment for future parse.
 
 ```js
 const cmtDocParser = require('cmtdoc-parser');
+require('cmtdoc-parser/extensions/parse-file');
 
-console.log(JSON.stringify(cmtDocParser.parseFile("../cmtdoc-parser/index.js", { under : { name : true } }), null, "\t"));
+console.log(JSON.stringify(cmtDocParser.parseFile("cmtdoc-parser/index.js", { under : { name : true } }), null, "\t"));
 ```
 
 The result will be something like this

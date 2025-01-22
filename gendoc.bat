@@ -1,0 +1,1 @@
+jsdoc -r . -R ./README.md
