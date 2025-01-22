@@ -17,6 +17,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node test/script.js",
-    "describe": "node test/script.js"
+    "describe": "node test/script.js",
+    "postgresql": "node platforms/postgresql.js"
   }
 }

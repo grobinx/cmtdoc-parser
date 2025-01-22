@@ -9,10 +9,6 @@
  * @module cmtdoc-parser
  */
 
-regex_postgresql_replace = {
-    "\\b" : "[[:>:]]"
-}
-
 const reCurlyContent = "(\\s*{([^{]*)?})"; // g2 - 2
 const reAngleContent = "(\\s*<([^<]*)>)"; // g2 - 2
 const reSquareContent = "(\\s*\\[([^\\[]*)\\])"; // g2 - 2
@@ -48,7 +44,7 @@ exports.regexRules = [
         description : "Top of documentary comment content.",
         example : "JSDoc 3 is an API documentation generator for JavaScript,\nsimilar to Javadoc or phpDocumentor.\nYou add documentation comments directly to your source code,\nright alongside the code itself.\nThe JSDoc tool will scan your source code and generate an HTML documentation website for you.",
         match : /^([^@]+)/g,
-        object : "property",
+        object : "array",
         type : "string",
         captures: {
             "1": "description"
@@ -345,10 +341,10 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@constructs name",
+        figure : "@constructs",
         description : "This function member will be the constructor for the previous class.",
         example : "@constructs",
-        match : /@(constructs)/g,
+        match : /@(constructs)\b/g,
         object : "property",
         type : "match",
         captures: {

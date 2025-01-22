@@ -15,6 +15,12 @@
             "name": "Test Comment Doc Parser",
             "request": "launch",
             "type": "node-terminal"
+        },
+        {
+            "command": "node ${workspaceFolder}\\platforms\\postgresql.js out=postgresql.sql",
+            "name": "PostgreSQL Comment Doc code",
+            "request": "launch",
+            "type": "node-terminal"
         }
     ]
 }
