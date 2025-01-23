@@ -75,10 +75,6 @@ Result
 			"types": [
 				"string="
 			]
-		},
-		{
-			"name": "<V>",
-			"description": "the value of the element"
 		}
 	]
 }
@@ -697,20 +693,6 @@ Result
 }
 ```
 
-### Figure `@implements {type}`
-This symbol implements an interface.
-
-Example
-```
-@implements {Color}
-```
-Result
-```js
-{
-	"implements": "{Color}"
-}
-```
-
 ### Figure `@interface name`
 This symbol is an interface that others can implement.
 
@@ -1273,8 +1255,8 @@ Result
 			"description": "some description"
 		},
 		{
-			"date": "<Andrzej",
-			"description": "Kałuża> some description"
+			"author": "Andrzej Kałuża",
+			"description": "some description"
 		},
 		{
 			"date": "2025-01-05",

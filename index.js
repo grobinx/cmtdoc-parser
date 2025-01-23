@@ -13,7 +13,7 @@ const reCurlyContent = "(\\s*{([^{]*)?})"; // g2 - 2
 const reAngleContent = "(\\s*<([^<]*)>)"; // g2 - 2
 const reSquareContent = "(\\s*\\[([^\\[]*)\\])"; // g2 - 2
 const reParenthContent = "(\\s*\\(([^\\(]*)\\))"; // g2 - 2
-const rePathName = "(\\s+([^\\s@)]+))"; // g2 - 2
+const rePathName = "(\\s+([^\\s@)<{}]+))"; // g2 - 2
 const reNameWithDefault = "(\\s*\\[(([^\\[\\=]+)\\s*(\\=\\s*([^\\[]*)?)?)?\\])"; // g3, g5 - 5
 const reContent = "(\\s+([^@\\-<{\\(]+))"; // g2 - 2
 const reDescription = "(\\s*([^@]*)?)"; // g2 - 2
