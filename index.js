@@ -5,7 +5,7 @@
  * 
  * @author Andrzej Kałuża
  * @created 2025-01-16
- * @version 1.1.5
+ * @version 1.1.6
  * @module cmtdoc-parser
  */
 
@@ -13,9 +13,9 @@ const reCurlyContent = "(\\s*{([^{]*)?})"; // g2 - 2
 const reAngleContent = "(\\s*<([^<]*)>)"; // g2 - 2
 const reSquareContent = "(\\s*\\[([^\\[]*)\\])"; // g2 - 2
 const reParenthContent = "(\\s*\\(([^\\(]*)\\))"; // g2 - 2
-const rePathName = "(\\s+([^\\s@]+))"; // g2 - 2
+const rePathName = "(\\s+([^\\s@)]+))"; // g2 - 2
 const reNameWithDefault = "(\\s*\\[(([^\\[\\=]+)\\s*(\\=\\s*([^\\[]*)?)?)?\\])"; // g3, g5 - 5
-const reAuthor = "(\\s+([^@\\-<{\\(]+))"; // g2 - 2
+const reContent = "(\\s+([^@\\-<{\\(]+))"; // g2 - 2
 const reDescription = "(\\s*([^@]*)?)"; // g2 - 2
 
 /**
@@ -37,6 +37,7 @@ const reDescription = "(\\s*([^@]*)?)"; // g2 - 2
  * @property {string} split."captures.value".delimiter delimiter for split
  * 
  * @isue not work inline {(at)link page} in descriptions
+ * @isue does not process first name and double last name separated by a dash (-) in figure author
  */
 exports.regexRules = [
     {
@@ -75,9 +76,9 @@ exports.regexRules = [
     {
         figure : "@property|prop [{type}] name|[name=value] [description]",
         description : "The @property tag is a way to easily document a list of static properties of a class, namespace or other object.",
-        example : "@property {object|json} defaults The default values for parties.\n@property {number} defaults.players The default number of players.\n@property {number} defaults.treasure.gold How much gold the party starts with.",
+        example : "@property {object|json} defaults The default values for parties.\n@prop {number} defaults.players The default number of players.\n@property {number} defaults.treasure.gold How much gold the party starts with.",
         name : "property",
-        match : new RegExp("@(property|prop)" +reCurlyContent +"?(" +reNameWithDefault +"|" +rePathName +")" +reDescription +"?", "g"),
+        match : new RegExp("@(property|prop)\\b" +reCurlyContent +"?(" +reNameWithDefault +"|" +rePathName +")" +reDescription +"?", "g"),
         object : "array",
         type : "object",
         captures: {
@@ -268,7 +269,7 @@ exports.regexRules = [
         description : "Identify the author of an item.",
         example : "@author Andrzej Kałuża <aaa@server.pl> (http:\\page)\n@author Juliusz Cezar - I down't now way",
         name : "author",
-        match : new RegExp("@(author)" +reAuthor +reAngleContent +"?" +reParenthContent +"?" +"(\\s*\\-" +reDescription +"?)?", "g"),
+        match : new RegExp("@(author)" +reContent +reAngleContent +"?" +reParenthContent +"?" +"(\\s*\\-" +reDescription +"?)?", "g"),
         object : "array",
         type : "object",
         captures: {
@@ -366,7 +367,7 @@ exports.regexRules = [
         figure : "@default value",
         description : "Document the default value.",
         example : "@default 'Ex25622'",
-        match : new RegExp("@(default|defaultvalue)" +rePathName, "g"),
+        match : new RegExp("@(default|defaultvalue)\\b" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -410,7 +411,7 @@ exports.regexRules = [
         figure : "@description|desc|classdesc some description",
         description : "Describe a symbol.",
         example : "@description Add two numbers.",
-        match : new RegExp("@(description|desc|classdesc)" +reDescription, "g"),
+        match : new RegExp("@(description|desc|classdesc)\\b" +reDescription, "g"),
         object : "array",
         type : "string",
         captures: {
@@ -489,7 +490,7 @@ exports.regexRules = [
         figure : "@file some description",
         description : "Describe a file.",
         example : "@file Manages the configuration settings for the widget.",
-        match : new RegExp("@(file|fileoverview|overview)" +reDescription, "g"),
+        match : new RegExp("@(file|fileoverview|overview)\\b" +reDescription, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -512,7 +513,7 @@ exports.regexRules = [
         figure : "@function|func|method name",
         description : "Describe a function or method.",
         example : "@function myFunction",
-        match : new RegExp("@(function|func|method)" +rePathName, "g"),
+        match : new RegExp("@(function|func|method)\\b" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -623,7 +624,7 @@ exports.regexRules = [
         description : "Document a member.",
         example : "",
         name : "variable",
-        match : new RegExp("@(var|variable|member)" +reCurlyContent +rePathName +"?", "g"),
+        match : new RegExp("@(var|variable|member)\\b" +reCurlyContent +rePathName +"?", "g"),
         object : "property",
         type : "object",
         captures: {
@@ -813,7 +814,7 @@ exports.regexRules = [
         description : "Document the return value of a function.",
         example : "@returns {number} Sum of a and b",
         name : "returns",
-        match : new RegExp("@(returns|return)" +reCurlyContent +reDescription +"?", "g"),
+        match : new RegExp("@(returns|return)\\b" +reCurlyContent +reDescription +"?", "g"),
         object : "property",
         type : "object",
         captures: {
@@ -879,7 +880,7 @@ exports.regexRules = [
         description : "Describe what errors could be thrown.",
         example : "@throws {InvalidArgumentException}\n@throws Will throw an error if the argument is null.\n@throws {DivideByZero} Argument x must be non-zero.",
         name : "throws",
-        match : new RegExp("@(throws|exception)" +reCurlyContent +reDescription +"?", "g"),
+        match : new RegExp("@(throws|exception)" +reCurlyContent +"?" +reDescription +"?", "g"),
         object : "array",
         type : "object",
         captures: {
@@ -903,7 +904,7 @@ exports.regexRules = [
         description : "Document a custom type.",
         example : "@typedef {(number|string)} NumberLike\n@typedef {Object} WishGranter~Triforce",
         name : "typedef",
-        match : new RegExp("@(typedef)" +reCurlyContent +"?" +rePathName, "g"),
+        match : new RegExp("@(typedef)\\b" +reCurlyContent +"?" +rePathName, "g"),
         object : "property",
         type : "object",
         captures: {
@@ -927,7 +928,7 @@ exports.regexRules = [
         figure : "@type {type}",
         description : "Document the type of an object.",
         example : "@type {Array.<string>}\n@type {number}",
-        match : new RegExp("@(type)" +reCurlyContent, "g"),
+        match : new RegExp("@(type)\\b" +reCurlyContent, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -938,7 +939,7 @@ exports.regexRules = [
         figure : "@variation number",
         description : "Distinguish different objects with the same name.",
         example : "@variation 2",
-        match : new RegExp("@(variation)" +rePathName, "g"),
+        match : new RegExp("@(variation)\\b" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -949,7 +950,7 @@ exports.regexRules = [
         figure : "@version version",
         description : "Documents the version number of an item.",
         example : "@version 1.0.45\n@version 0.0.1 Beta",
-        match : new RegExp("@(version)" +reDescription, "g"),
+        match : new RegExp("@(version)\\b" +reDescription, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -961,7 +962,7 @@ exports.regexRules = [
         description : "Document the value yielded by a generator function.",
         example : "@yields {number}\n@yields {number} The next number in the Fibonacci sequence.]",
         name : "yield",
-        match : new RegExp("@(yield|yields|next)" +reCurlyContent +"?" +reDescription +"?", "g"),
+        match : new RegExp("@(yield|yields|next)\\b" +reCurlyContent +"?" +reDescription +"?", "g"),
         object : "property",
         type : "object",
         captures: {
@@ -974,18 +975,18 @@ exports.regexRules = [
         description : "Change log of object.",
         example : "@changed 2025-01-01 <Andrzej Kałuża> some description\n@changed <Andrzej Kałuża> some description\n@changed 2025-01-05 some description",
         name : "change",
-        match : new RegExp("@(change|changed|changelog|modified)" +rePathName +"?" +reAngleContent +"?" +reDescription +"?", "g"),
+        match : new RegExp("@(change|changed|changelog|modified)\\b" +rePathName +"?" +reAngleContent +"?" +reDescription +"?", "g"),
         object : "array",
         type : "object",
         captures: {
             "3": "date",
-            "6": "author",
-            "8": "description"
+            "5": "author",
+            "7": "description"
         }
     },
     {
         figure : "@isue some description",
-        description : "Describes the problem in the code.",
+        description : "Describes the know problem in the code.",
         example : "@isue sometimes returns null\n@isue link not work",
         match : new RegExp("@(isue)" +reDescription, "g"),
         object : "array",
@@ -1012,7 +1013,7 @@ exports.regexRules = [
         description : "Document class templates and his type.",
         example : "@template {String} K - K must be a string or string literal\n@template K, V, Z",
         name : "template",
-        match : new RegExp("@(template)" +reCurlyContent +"?" +reAuthor +"(\\s*\\-" +reDescription +"?)?", "g"),
+        match : new RegExp("@(template)" +reCurlyContent +"?" +reContent +"(\\s*\\-" +reDescription +"?)?", "g"),
         object : "array",
         type : "object",
         captures: {
@@ -1040,6 +1041,17 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "callback"
+        }
+    },
+    {
+        figure : "@test",
+        description : "This symbol indicates that the function is test or testing.",
+        example : "@test",
+        match : /@(test)\b/g,
+        object : "property",
+        type : "match",
+        captures: {
+            "1": "test"
         }
     }
 ]

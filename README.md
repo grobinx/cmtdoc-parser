@@ -91,6 +91,8 @@ Result:
 ...
 ```
 
+Refer to the [DESCRIBE.md](platforms/describe.md) file for information about figures.
+
 ### Parse single documentation comment
 
 ```js
@@ -197,4 +199,57 @@ The result will be something like this
         }
     }
 ]
+```
+
+## Platforms usage
+
+### PostgreSQL
+
+Run script platforms/postgresql.js to generate PostgreSQL function parsing jsdoc
+
+```
+npm run postgresql -- out=platforms/postgresql.sql function=jsdoc_parse
+```
+or
+```
+node postgresql out=platforms/postgresql.sql function=jsdoc_parse
+```
+
+As a result you will get jsdoc_parse function in postgresql.sql file to be store in database. Like below...
+
+```sql
+create or replace function jsdoc_parse(str varchar) returns jsonb language plpgsql stable
+as $fn$
+begin
+  str := string_agg(substring(line from '^\s*\*\s*(.*)'), e'\n')
+    from (select unnest(string_to_array(str, e'\n')) line) d
+   where trim(line) not in ('/**', '*/');
+  --
+  return jsonb_object_agg(r.figure, r.object)
+    from (    -- This is root description
+    select 'root' as figure, to_jsonb(r[1]) as object
+      from regexp_matches(str, '^([^@]+)') r
+    union all
+    ...
+    -- @callback name
+    select 'callback' as figure, to_jsonb(array_agg(r[3])) as object
+      from regexp_matches(str, '@(callback)(\s+([^\s@]+))', 'g') r
+    having array_agg(r[3]) is not null) r;
+end;
+$fn$;
+```
+
+You can use it by executing the query below. I assume that the functions have the js comment contained in the function body, not in the function comment.
+
+```sql
+select p.proname, jsdoc_parse(p.doc) as doc, p.arguments, p.description
+  from (select p.proname, substring(pg_get_functiondef(p.oid) from '\/\*\*.*\*\/') as doc, 
+               coalesce(pg_get_function_arguments(p.oid), '') arguments,
+               d.description
+          from pg_proc p
+               join pg_namespace n on n.oid = p.pronamespace
+               left join pg_description d on d.classoid = 'pg_proc'::regclass and d.objoid = p.oid and d.objsubid = 0
+         where n.nspname = :scema_name
+           and p.prokind in ('p', 'f')) p
+ where p.doc is not null
 ```

@@ -21,6 +21,12 @@
             "name": "PostgreSQL Comment Doc code",
             "request": "launch",
             "type": "node-terminal"
+        },
+        {
+            "command": "node ${workspaceFolder}\\platforms\\describe-md.js",
+            "name": "Describe jsdoc-parser figures",
+            "request": "launch",
+            "type": "node-terminal"
         }
     ]
 }

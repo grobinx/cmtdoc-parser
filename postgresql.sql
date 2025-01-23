@@ -8,7 +8,7 @@ as $fn$
  * Function remove comment characters from string.
  * 
  * @author cmtdoc parser (https://github.com/grobinx/cmtdoc-parser)
- * @created Thu Jan 23 2025 19:06:36 GMT+0100 (czas środkowoeuropejski standardowy)
+ * @created Thu Jan 23 2025 18:58:28 GMT+0100 (czas środkowoeuropejski standardowy)
  * 
  * @param {varchar|text} str string to parse
  * @returns {jsonb}
@@ -25,11 +25,9 @@ as $fn$
  *  where p.doc is not null
  */
 begin
-  if position('/**' in str) then
-    str := string_agg(substring(line from '^\s*\*\s*(.*)'), e'\n')
-      from (select unnest(string_to_array(str, e'\n')) line) d
-     where trim(line) not in ('/**', '*/');
-  end if;
+  str := string_agg(substring(line from '^\s*\*\s*(.*)'), e'\n')
+    from (select unnest(string_to_array(str, e'\n')) line) d
+   where trim(line) not in ('/**', '*/');
   --
   return jsonb_object_agg(r.figure, r.object)
     from (    -- This is root description
