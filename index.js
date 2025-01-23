@@ -15,7 +15,7 @@ const reSquareContent = "(\\s*\\[([^\\[]*)\\])"; // g2 - 2
 const reParenthContent = "(\\s*\\(([^\\(]*)\\))"; // g2 - 2
 const rePathName = "(\\s+([^\\s@]+))"; // g2 - 2
 const reNameWithDefault = "(\\s*\\[(([^\\[\\=]+)\\s*(\\=\\s*([^\\[]*)?)?)?\\])"; // g3, g5 - 5
-const reContent = "(\\s+([^@\\-<{\\(]+))"; // g2 - 2
+const reAuthor = "(\\s+([^@\\-<{\\(]+))"; // g2 - 2
 const reDescription = "(\\s*([^@]*)?)"; // g2 - 2
 
 /**
@@ -44,10 +44,10 @@ exports.regexRules = [
         description : "Top of documentary comment content.",
         example : "JSDoc 3 is an API documentation generator for JavaScript,\nsimilar to Javadoc or phpDocumentor.\nYou add documentation comments directly to your source code,\nright alongside the code itself.\nThe JSDoc tool will scan your source code and generate an HTML documentation website for you.",
         match : /^([^@]+)/g,
-        object : "array",
+        object : "property",
         type : "string",
         captures: {
-            "1": "description"
+            "1": "root"
         }
     },
     {
@@ -268,7 +268,7 @@ exports.regexRules = [
         description : "Identify the author of an item.",
         example : "@author Andrzej Kałuża <aaa@server.pl> (http:\\page)\n@author Juliusz Cezar - I down't now way",
         name : "author",
-        match : new RegExp("@(author)" +reContent +reAngleContent +"?" +reParenthContent +"?" +"(\\s*\\-" +reDescription +"?)?", "g"),
+        match : new RegExp("@(author)" +reAuthor +reAngleContent +"?" +reParenthContent +"?" +"(\\s*\\-" +reDescription +"?)?", "g"),
         object : "array",
         type : "object",
         captures: {
@@ -567,7 +567,7 @@ exports.regexRules = [
         figure : "@created date",
         description : "Date creation",
         example : "@created 2025-01-17",
-        match : new RegExp("@(created)" +rePathName, "g"),
+        match : new RegExp("@(created)" +reDescription, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -1012,7 +1012,7 @@ exports.regexRules = [
         description : "Document class templates and his type.",
         example : "@template {String} K - K must be a string or string literal\n@template K, V, Z",
         name : "template",
-        match : new RegExp("@(template)" +reCurlyContent +"?" +reContent +"(\\s*\\-" +reDescription +"?)?", "g"),
+        match : new RegExp("@(template)" +reCurlyContent +"?" +reAuthor +"(\\s*\\-" +reDescription +"?)?", "g"),
         object : "array",
         type : "object",
         captures: {

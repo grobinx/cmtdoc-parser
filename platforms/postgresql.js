@@ -1,15 +1,32 @@
 const cmtDocParer = require("../index.js");
+const fs = require("node:fs");
 
-regex_postgresql_replace = {
+/**
+ * This is a script that creates a PostgreSQL function that allows you to analyze documentation comments contained eg. in functions
+ * 
+ * @example
+ * npm run postgresql -- out=postgresql.sql function=jsdoc_parse
+ * 
+ * @author Andrzej Kałuża
+ * @created 2025-01-23
+ * @version 1.0.0
+ * @module postgresql
+ */
+
+/**
+ * This is posix alternative for PostgreSQL
+ * @const {json}
+ */
+const regex_postgresql_replace = {
     "\\b" : "[[:>:]]"
 }
 
-function getArguments(name) {
+function getArgument(name) {
     let regexp = new RegExp("^" +name +"\=(.*)");
     for (const arg of process.argv) {
         const captures = regexp.exec(arg);
         if (captures) {
-            return captures[0];
+            return captures[1];
         }
     }
 }
@@ -24,8 +41,8 @@ function help() {
     )
 }
 
-let fileName = getArguments("out");
-let functionName = getArguments("function");
+let fileName = getArgument("out");
+let functionName = getArgument("function");
 let strVarName = "str";
 let rowName = "r";
 if (!fileName) {
@@ -104,8 +121,22 @@ function arrayOfObject(regexp, strName, rowName) {
     return code;
 }
 
-function arrayOfString(regexp) {
-
+function arrayOfString(regexp, strName, rowName) {
+    let captures = captureColumns(regexp);
+    let codeFigure;
+    let codeObject;
+    let codeHaving;
+    for (const [key, value] of Object.entries(captures)) {
+        codeFigure = `'${key}' as figure`;
+        codeObject = `to_jsonb(array_agg(${rowName}[${value[0]}])) as object`;
+        codeHaving = `${rowName}[${value[0]}]`;
+        break;
+    }
+    let code = 
+        `    select ${codeFigure}, ${codeObject}\n` +
+        `      from regexp_matches(${strName}, '${regexp.match_postgres}', 'g') ${rowName}\n` +
+        `    having array_agg(${codeHaving}) is not null`;
+    return code;
 }
 
 function propertyOfObject(regexp, strName, rowName) {
@@ -117,12 +148,36 @@ function propertyOfObject(regexp, strName, rowName) {
     return code;
 }
 
-function propertyOfString(regexp) {
-
+function propertyOfString(regexp, strName, rowName) {
+    let captures = captureColumns(regexp);
+    let codeFigure;
+    let codeObject;
+    let codeHaving;
+    for (const [key, value] of Object.entries(captures)) {
+        codeFigure = `'${key}' as figure`;
+        codeObject = `to_jsonb(${rowName}[${value[0]}]) as object`;
+        break;
+    }
+    let code = 
+        `    select ${codeFigure}, ${codeObject}\n` +
+        `      from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}`
+    return code;
 }
 
-function propertyOfMatch(regexp) {
-
+function propertyOfMatch(regexp, strName, rowName) {
+    let captures = captureColumns(regexp);
+    let codeFigure;
+    let codeObject;
+    let codeHaving;
+    for (const [key, value] of Object.entries(captures)) {
+        codeFigure = `'${key}' as figure`;
+        codeObject = `to_jsonb(true) as object`;
+        break;
+    }
+    let code = 
+        `    select ${codeFigure}, ${codeObject}\n` +
+        `      from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}`
+    return code;
 }
 
 let code = "";
@@ -143,7 +198,7 @@ for (const regexp of cmtDocParer.regexRules) {
                     break;
                 }
                 case "string": {
-                    code += arrayOfString(regexp) ?? "";
+                    selects.push(arrayOfString(regexp, strVarName, rowName));
                     break;
                 }
             }
@@ -156,11 +211,11 @@ for (const regexp of cmtDocParer.regexRules) {
                     break;
                 }
                 case "string": {
-                    code += propertyOfString(regexp) ?? "";
+                    selects.push(propertyOfString(regexp, strVarName, rowName));
                     break;
                 }
                 case "match": {
-                    code += propertyOfMatch(regexp) ?? "";
+                    selects.push(propertyOfMatch(regexp, strVarName, rowName));
                     break;
                 }
             }
@@ -173,10 +228,37 @@ code =
     `  returns jsonb\n` +
     `  language plpgsql\n` +
     `  stable\n` +
-    `as $function$\n` +
+    `as $fn$\n` +
+    `/**\n` +
+    ` * Function parse jsdoc and returns jsonb structure<br />\n` +
+    ` * Function remove comment characters from string.\n` +
+    ` * \n` +
+    ` * @author cmtdoc parser (https://github.com/grobinx/cmtdoc-parser)\n` +
+    ` * @created ${new Date().toString()}\n` +
+    ` * \n` +
+    ` * @param {varchar|text} ${strVarName} string to parse\n` +
+    ` * @returns {jsonb}\n` +
+    ` * @example\n` +
+    ` * select p.proname, ${functionName}(p.doc) as doc, p.arguments, p.description\n` +
+    ` *   from (select p.proname, substring(pg_get_functiondef(p.oid) from '\\/\\*\\*.*\\*\\/') as doc, \n` +
+    ` *                coalesce(pg_get_function_arguments(p.oid), '') arguments,\n` +
+    ` *                d.description\n` +
+    ` *           from pg_proc p\n` +
+    ` *                join pg_namespace n on n.oid = p.pronamespace\n` +
+    ` *                left join pg_description d on d.classoid = 'pg_proc'::regclass and d.objoid = p.oid and d.objsubid = 0\n` +
+    ` *          where n.nspname = :scema_name\n` +
+    ` *            and p.proisagg is false) p\n` +
+    ` *  where p.doc is not null\n` +
+    ` */\n` +
     `begin\n` +
+    `  ${strVarName} := string_agg(substring(line from '^\\s*\\*\\s*(.*)'), e'\\n')\n` +
+    `    from (select unnest(string_to_array(${strVarName}, e'\\n')) line) d\n` +
+    `   where trim(line) not in ('/**', '*/');\n` +
+    `  --\n` +
     `  return jsonb_object_agg(${rowName}.figure, ${rowName}.object)\n` +
     `    from (${selects.join("\n    union all\n")}) ${rowName};\n` +
     `end;\n` +
-    `$function$;`;
-console.log(code);
+    `$fn$;`;
+
+fs.writeFileSync(fileName, code);
+console.log(`File ${fileName} was created`);
