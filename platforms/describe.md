@@ -469,7 +469,7 @@ Result
 }
 ```
 
-### Figure `@default value`
+### Figure `@default|defaultvalue value`
 Document the default value.
 
 Example
@@ -483,7 +483,7 @@ Result
 }
 ```
 
-### Figure `@default`
+### Figure `@default|defaultvalue`
 Document the default.
 
 Example
@@ -693,6 +693,20 @@ Result
 }
 ```
 
+### Figure `@implements {type}`
+This symbol implements an interface.
+
+Example
+```
+@implements {Color}
+```
+Result
+```js
+{
+	"implements": "Color"
+}
+```
+
 ### Figure `@interface name`
 This symbol is an interface that others can implement.
 
@@ -717,7 +731,7 @@ Example
 Result
 ```js
 {
-	"interface": true
+	"undefined": true
 }
 ```
 
@@ -796,6 +810,23 @@ Result
 }
 ```
 
+### Figure `@member|var|variable {type} [name]`
+Document a member.
+
+Example
+```
+@var {string} regexRule
+```
+Result
+```js
+{
+	"variable": {
+		"type": "string",
+		"name": "regexRule"
+	}
+}
+```
+
 ### Figure `@memberof[!] name`
 This symbol belongs to a parent symbol.
 
@@ -821,6 +852,20 @@ Result
 ```js
 {
 	"mixes": "Eventful"
+}
+```
+
+### Figure `@mixin name`
+Document a mixin object.
+
+Example
+```
+@mixin Future
+```
+Result
+```js
+{
+	"mixin": "Future"
 }
 ```
 
@@ -905,6 +950,20 @@ Result
 ```js
 {
 	"name": "highlightSearchTerm"
+}
+```
+
+### Figure `@package {type}`
+This symbol is meant to be package-private.
+
+Example
+```
+@package {MyPackage}
+```
+Result
+```js
+{
+	"package": "MyPackage"
 }
 ```
 

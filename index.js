@@ -49,6 +49,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "1": "root"
+        },
+        expect: {
+            "root": "JSDoc 3 is an API documentation generator for JavaScript,\nsimilar to Javadoc or phpDocumentor.\nYou add documentation comments directly to your source code,\nright alongside the code itself.\nThe JSDoc tool will scan your source code and generate an HTML documentation website for you."
         }
     },
     {
@@ -71,6 +74,52 @@ exports.regexRules = [
                 "name" : "types",
                 "delimiter" : "|"
             }
+        },
+        expect: {
+            "param": [
+                {
+                    "type": "string|any[]|*",
+                    "name": "aid",
+                    "types": [
+                        "string",
+                        "any[]",
+                        "*"
+                    ]
+                },
+                {
+                    "type": "string",
+                    "name": "alabel_text",
+                    "default": "abc",
+                    "description": "if the LABEL is to appear",
+                    "types": [
+                        "string"
+                    ]
+                },
+                {
+                    "type": "attributes",
+                    "name": "alabel_attrs",
+                    "description": "extra attributes for LABEL",
+                    "types": [
+                        "attributes"
+                    ]
+                },
+                {
+                    "type": "attributes",
+                    "name": "aselect_attrs",
+                    "description": "extra attribues for INPUT",
+                    "types": [
+                        "attributes"
+                    ]
+                },
+                {
+                    "type": "string=",
+                    "name": "somebody",
+                    "description": "- Somebody's name.",
+                    "types": [
+                        "string="
+                    ]
+                }
+            ]
         }
     },
     {
@@ -93,6 +142,35 @@ exports.regexRules = [
                 "name" : "types",
                 "delimiter" : "|"
             }
+        },
+        expect: {
+            "property": [
+                {
+                    "type": "object|json",
+                    "name": "defaults",
+                    "description": "The default values for parties.",
+                    "types": [
+                        "object",
+                        "json"
+                    ]
+                },
+                {
+                    "type": "number",
+                    "name": "defaults.players",
+                    "description": "The default number of players.",
+                    "types": [
+                        "number"
+                    ]
+                },
+                {
+                    "type": "number",
+                    "name": "defaults.treasure.gold",
+                    "description": "How much gold the party starts with.",
+                    "types": [
+                        "number"
+                    ]
+                }
+            ]
         }
     },
     {
@@ -104,6 +182,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "async"
+        },
+        expect: {
+            "async": true
         }
     },
     {
@@ -115,6 +196,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "generator"
+        },
+        expect: {
+            "generator": true
         }
     },
     {
@@ -126,6 +210,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "global"
+        },
+        expect: {
+            "global": true
         }
     },
     {
@@ -137,6 +224,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "hideconstructor"
+        },
+        expect: {
+            "hideconstructor": true
         }
     },
     {
@@ -148,6 +238,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "ignore"
+        },
+        expect: {
+            "ignore": true
         }
     },
     {
@@ -159,6 +252,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "inner"
+        },
+        expect: {
+            "inner": true
         }
     },
     {
@@ -170,6 +266,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "instance"
+        },
+        expect: {
+            "instance": true
         }
     },
     {
@@ -181,6 +280,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "override"
+        },
+        expect: {
+            "override": true
         }
     },
     {
@@ -192,6 +294,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "public"
+        },
+        expect: {
+            "public": true
         }
     },
     {
@@ -203,6 +308,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "readonly"
+        },
+        expect: {
+            "readonly": true
         }
     },
     {
@@ -214,6 +322,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "static"
+        },
+        expect: {
+            "static": true
         }
     },
     {
@@ -225,6 +336,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "abstract"
+        },
+        expect: {
+            "abstract": true
         }
     },
     {
@@ -236,6 +350,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "2": "access"
+        },
+        expect: {
+            "access": "package"
         }
     },
     {
@@ -249,6 +366,11 @@ exports.regexRules = [
         captures: {
             "3": "path",
             "5": "description"
+        },
+        expect: {
+            "alias": {
+                "path": "trackr.CookieManager"
+            }
         }
     },
     {
@@ -262,6 +384,13 @@ exports.regexRules = [
         captures: {
             "3": "path",
             "5": "description"
+        },
+        expect: {
+            "augments": [
+                {
+                    "path": "Animal"
+                }
+            ]
         }
     },
     {
@@ -277,6 +406,19 @@ exports.regexRules = [
             "5": "email",
             "7": "page",
             "10": "description"
+        },
+        expect: {
+            "author": [
+                {
+                    "author": "Andrzej Kałuża",
+                    "email": "aaa@server.pl",
+                    "page": "http:\\page"
+                },
+                {
+                    "author": "Juliusz Cezar",
+                    "description": "I down't now way"
+                }
+            ]
         }
     },
     {
@@ -291,6 +433,12 @@ exports.regexRules = [
             "3": "that",
             "5": "this",
             "7": "description"
+        },
+        expect: {
+            "borrows": {
+                "that": "trim",
+                "this": "myTrime"
+            }
         }
     },
     {
@@ -304,6 +452,12 @@ exports.regexRules = [
         captures: {
             "3": "type",
             "5": "name"
+        },
+        expect: {
+            "class": {
+                "type": "Person",
+                "name": "Human"
+            }
         }
     },
     {
@@ -315,6 +469,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "class"
+        },
+        expect: {
+            "class": true
         }
     },
     {
@@ -328,6 +485,11 @@ exports.regexRules = [
         captures: {
             "3": "type",
             "5": "name"
+        },
+        expect: {
+            "constant": {
+                "type": "number"
+            }
         }
     },
     {
@@ -339,6 +501,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "constructs"
+        },
+        expect: {
+            "constructs": "Menu"
         }
     },
     {
@@ -350,6 +515,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "constructs"
+        },
+        expect: {
+            "constructs": true
         }
     },
     {
@@ -361,10 +529,13 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "copyright"
+        },
+        expect: {
+            "copyright": "Andrzej Kałuża 2025"
         }
     },
     {
-        figure : "@default value",
+        figure : "@default|defaultvalue value",
         description : "Document the default value.",
         example : "@default 'Ex25622'",
         match : new RegExp("@(default|defaultvalue)\\b" +rePathName, "g"),
@@ -372,10 +543,13 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "default"
+        },
+        expect: {
+            "default": "'Ex25622'"
         }
     },
     {
-        figure : "@default",
+        figure : "@default|defaultvalue",
         description : "Document the default.",
         example : "@default",
         match : /@(default|defaultvalue)\b/g,
@@ -383,6 +557,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "default"
+        },
+        expect: {
+            "default": true
         }
     },
     {
@@ -394,6 +571,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "deprecated"
+        },
+        expect: {
+            "deprecated": "since version 2.0 use other function"
         }
     },
     {
@@ -405,6 +585,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "deprecated"
+        },
+        expect: {
+            "deprecated": true
         }
     },
     {
@@ -416,6 +599,11 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "description"
+        },
+        expect: {
+            "description": [
+                "Add two numbers."
+            ]
         }
     },
     {
@@ -428,6 +616,9 @@ exports.regexRules = [
         captures: {
             "3": "enum",
             "5": "name"
+        },
+        expect: {
+            "enum": "number"
         }
     },
     {
@@ -439,6 +630,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "enum"
+        },
+        expect: {
+            "enum": true
         }
     },
     {
@@ -451,6 +645,11 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "event"
+        },
+        expect: {
+            "event": [
+                "Hurl#snowball"
+            ]
         }
     },
     {
@@ -462,6 +661,12 @@ exports.regexRules = [
         type : "string",
         captures: {
             "2": "example"
+        },
+        expect: {
+            "example": [
+                "// returns 2\nglobalNS.method1(5, 10);",
+                "// returns 3\nglobalNS.method(5, 15);"
+            ]
         }
     },
     {
@@ -473,6 +678,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "exports"
+        },
+        expect: {
+            "exports": "Privare"
         }
     },
     {
@@ -484,6 +692,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "external"
+        },
+        expect: {
+            "external": "\"jQuery.fn\""
         }
     },
     {
@@ -495,6 +706,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "file"
+        },
+        expect: {
+            "file": "Manages the configuration settings for the widget."
         }
     },
     {
@@ -507,6 +721,11 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "event"
+        },
+        expect: {
+            "event": [
+                "Milkshake#drain"
+            ]
         }
     },
     {
@@ -518,6 +737,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "function"
+        },
+        expect: {
+            "function": "myFunction"
         }
     },
     {
@@ -529,17 +751,23 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "function"
+        },
+        expect: {
+            "function": true
         }
     },
     {
         figure : "@implements {type}",
         description : "This symbol implements an interface.",
         example : "@implements {Color}",
-        match : new RegExp("@(implements)" +rePathName, "g"),
+        match : new RegExp("@(implements)" +reCurlyContent, "g"),
         object : "property",
         type : "string",
         captures: {
             "3": "implements"
+        },
+        expect: {
+            "implements": "Color"
         }
     },
     {
@@ -551,6 +779,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "interface"
+        },
+        expect: {
+            "interface": "Color"
         }
     },
     {
@@ -561,7 +792,7 @@ exports.regexRules = [
         object : "property",
         type : "match",
         captures: {
-            "1": "interface"
+            "interface": true
         }
     },
     {
@@ -573,6 +804,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "created"
+        },
+        expect: {
+            "created": "2025-01-17"
         }
     },
     {
@@ -584,6 +818,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "2": "kind"
+        },
+        expect: {
+            "kind": "class"
         }
     },
     {
@@ -595,6 +832,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "lends"
+        },
+        expect: {
+            "lends": "Person.prototype"
         }
     },
     {
@@ -606,6 +846,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "license"
+        },
+        expect: {
+            "license": "The MIT License is a permissive software license originating at the Massachusetts Institute of Technology (MIT)[6] in the late 1980s.[7] As a permissive license, it puts very few restrictions on reuse and therefore has high license compatibility.[8][9]\nUnlike copyleft software licenses, the MIT License also permits reuse within proprietary software, provided that all copies of the software or its substantial portions include a copy of the terms of the MIT License and also a copyright notice.[9][10] In 2015, the MIT License was the most popular software license on GitHub,[11] and was still the most popular in 2024.[12]\nNotable projects that use the MIT License include the X Window System, Ruby on Rails, Node.js, Lua, jQuery, .NET, Angular, and React."
         }
     },
     {
@@ -617,12 +860,17 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "listens"
+        },
+        expect: {
+            "listens": [
+                "module:hurler~event:snowball"
+            ]
         }
     },
     {
         figure : "@member|var|variable {type} [name]",
         description : "Document a member.",
-        example : "",
+        example : "@var {string} regexRule",
         name : "variable",
         match : new RegExp("@(var|variable|member)\\b" +reCurlyContent +rePathName +"?", "g"),
         object : "property",
@@ -630,6 +878,12 @@ exports.regexRules = [
         captures: {
             "3": "type",
             "5": "name"
+        },
+        expect: {
+            "variable": {
+                "type": "string",
+                "name": "regexRule"
+            }
         }
     },
     {
@@ -641,6 +895,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "memberof"
+        },
+        expect: {
+            "memberof": "Tools"
         }
     },
     {
@@ -652,17 +909,23 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "mixes"
+        },
+        expect: {
+            "mixes": "Eventful"
         }
     },
     {
         figure : "@mixin name",
         description : "Document a mixin object.",
-        example : "@mixin",
+        example : "@mixin Future",
         match : new RegExp("@(mixin)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
             "3": "mixin"
+        },
+        expect: {
+            "mixin": "Future"
         }
     },
     {
@@ -674,6 +937,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "mixin"
+        },
+        expect: {
+            "mixin": true
         }
     },
     {
@@ -685,6 +951,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "module"
+        },
+        expect: {
+            "module": "MyModule"
         }
     },
     {
@@ -696,6 +965,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "module"
+        },
+        expect: {
+            "module": true
         }
     },
     {
@@ -707,6 +979,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "namespace"
+        },
+        expect: {
+            "namespace": "MyNamespace"
         }
     },
     {
@@ -719,6 +994,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "namespace"
+        },
+        expect: {
+            "namespace": true
         }
     },
     {
@@ -730,17 +1008,23 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "name"
+        },
+        expect: {
+            "name": "highlightSearchTerm"
         }
     },
     {
         figure : "@package {type}",
         description : "This symbol is meant to be package-private.",
-        example : "@package",
+        example : "@package {MyPackage}",
         match : new RegExp("@(package)" +reCurlyContent, "g"),
         object : "property",
         type : "string",
         captures: {
             "3": "package"
+        },
+        expect: {
+            "package": "MyPackage"
         }
     },
     {
@@ -752,6 +1036,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "package"
+        },
+        expect: {
+            "package": true
         }
     },
     {
@@ -763,6 +1050,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "private"
+        },
+        expect: {
+            "private": "integer"
         }
     },
     {
@@ -774,6 +1064,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "private"
+        },
+        expect: {
+            "private": true
         }
     },
     {
@@ -785,6 +1078,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "protected"
+        },
+        expect: {
+            "protected": "Number"
         }
     },
     {
@@ -796,6 +1092,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "protected"
+        },
+        expect: {
+            "protected": true
         }
     },
     {
@@ -807,6 +1106,12 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "requires"
+        },
+        expect: {
+            "requires": [
+                "module:xyzcorp/helper",
+                "xyzcorp/helper.ShinyWidget#polish"
+            ]
         }
     },
     {
@@ -826,6 +1131,15 @@ exports.regexRules = [
                 name : "types",
                 delimiter : "|"
             }
+        },
+        expect: {
+            "returns": {
+                "type": "number",
+                "description": "Sum of a and b",
+                "types": [
+                    "number"
+                ]
+            }
         }
     },
     {
@@ -840,6 +1154,26 @@ exports.regexRules = [
             "4": "path",
             "6": "path",
             "8": "description"
+        },
+        expect: {
+            "see": [
+                {
+                    "path": "@link bar"
+                },
+                {
+                    "path": "bar"
+                },
+                {
+                    "path": "@link foo",
+                    "description": "for further information."
+                },
+                {
+                    "path": "@link http://github.com|GitHub"
+                },
+                {
+                    "path": "package.Class#method"
+                }
+            ]
         }
     },
     {
@@ -851,6 +1185,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "since"
+        },
+        expect: {
+            "since": "1.0.1"
         }
     },
     {
@@ -862,6 +1199,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "summary"
+        },
+        expect: {
+            "summary": "A concise summary."
         }
     },
     {
@@ -873,6 +1213,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "this"
+        },
+        expect: {
+            "this": "Greeter"
         }
     },
     {
@@ -886,6 +1229,20 @@ exports.regexRules = [
         captures: {
             "3": "type",
             "5": "description"
+        },
+        expect: {
+            "throws": [
+                {
+                    "type": "InvalidArgumentException"
+                },
+                {
+                    "description": "Will throw an error if the argument is null."
+                },
+                {
+                    "type": "DivideByZero",
+                    "description": "Argument x must be non-zero."
+                }
+            ]
         }
     },
     {
@@ -897,6 +1254,12 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "todo"
+        },
+        expect: {
+            "todo": [
+                "Write the documentation.",
+                "Implement this function."
+            ]
         }
     },
     {
@@ -910,6 +1273,12 @@ exports.regexRules = [
         captures: {
             "3": "type",
             "5": "name"
+        },
+        expect: {
+            "typedef": {
+                "type": "Object",
+                "name": "WishGranter~Triforce"
+            }
         }
     },
     {
@@ -922,6 +1291,12 @@ exports.regexRules = [
         captures: {
             "4": "tutorial",
             "6": "tutorial"
+        },
+        expect: {
+            "tutorial": [
+                "tutorial-1",
+                "@link index.js"
+            ]
         }
     },
     {
@@ -933,6 +1308,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "type"
+        },
+        expect: {
+            "type": "number"
         }
     },
     {
@@ -944,6 +1322,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "variation"
+        },
+        expect: {
+            "variation": "2"
         }
     },
     {
@@ -955,6 +1336,9 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "version"
+        },
+        expect: {
+            "version": "0.0.1 Beta"
         }
     },
     {
@@ -968,6 +1352,12 @@ exports.regexRules = [
         captures: {
             "3": "type",
             "5": "description"
+        },
+        expect: {
+            "yield": {
+                "type": "number",
+                "description": "The next number in the Fibonacci sequence.]"
+            }
         }
     },
     {
@@ -982,6 +1372,23 @@ exports.regexRules = [
             "3": "date",
             "5": "author",
             "7": "description"
+        },
+        expect: {
+            "change": [
+                {
+                    "date": "2025-01-01",
+                    "author": "Andrzej Kałuża",
+                    "description": "some description"
+                },
+                {
+                    "author": "Andrzej Kałuża",
+                    "description": "some description"
+                },
+                {
+                    "date": "2025-01-05",
+                    "description": "some description"
+                }
+            ]
         }
     },
     {
@@ -993,6 +1400,12 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "isue"
+        },
+        expect: {
+            "isue": [
+                "sometimes returns null",
+                "link not work"
+            ]
         }
     },
     {
@@ -1006,6 +1419,22 @@ exports.regexRules = [
         captures: {
             "2": "figure",
             "7": "description"
+        },
+        expect: {
+            "figure": [
+                {
+                    "figure": "getData()",
+                    "description": "returns all data as array"
+                },
+                {
+                    "figure": "getData(options)",
+                    "description": "returns all data as array"
+                },
+                {
+                    "figure": "getData(uniqueId | index | object related with row, options)",
+                    "description": "returns row data as JSON"
+                }
+            ]
         }
     },
     {
@@ -1030,6 +1459,29 @@ exports.regexRules = [
                 name : "names",
                 delimiter : ","
             }
+        },
+        expect: {
+            "template": [
+                {
+                    "type": "String",
+                    "name": "K",
+                    "description": "K must be a string or string literal",
+                    "types": [
+                        "String"
+                    ],
+                    "names": [
+                        "K"
+                    ]
+                },
+                {
+                    "name": "K, V, Z",
+                    "names": [
+                        "K",
+                        "V",
+                        "Z"
+                    ]
+                }
+            ]
         }
     },
     {
@@ -1041,6 +1493,11 @@ exports.regexRules = [
         type : "string",
         captures: {
             "3": "callback"
+        },
+        expect: {
+            "callback": [
+                "Predicate"
+            ]
         }
     },
     {
@@ -1052,6 +1509,9 @@ exports.regexRules = [
         type : "match",
         captures: {
             "1": "test"
+        },
+        expect: {
+            "test": true
         }
     }
 ]
@@ -1188,7 +1648,7 @@ exports.walk = function (str, callback, options = {}) {
                 }
             }
         }
-        if (Object.keys(figure).length) {
+        if (Object.keys(figure).length || options.test) {
             callback(regex, figure, matches);
         }
     }
@@ -1222,17 +1682,36 @@ exports.parse = function (str, options = {}) {
     return document;
 }
 
+ function deepEqual (arg1, arg2) {
+    if (Object.prototype.toString.call(arg1) === Object.prototype.toString.call(arg2)) {
+        if (Object.prototype.toString.call(arg1) === '[object Object]' || Object.prototype.toString.call(arg1) === '[object Array]') {
+            if (Object.keys(arg1).length !== Object.keys(arg2).length ) {
+             return false;
+            }
+            return (Object.keys(arg1).every(function (key) {
+                return deepEqual(arg1[key], arg2[key]);
+            }));
+        }
+        return arg1 === arg2;
+    }
+    return false;
+}
+
 /**
  * Describe rules, figures with examples and structure look like.
  * This is also self test.
  * 
  * @function describe
  * @param {json} [options={}]
+ * @property {boolean} options.test test if "expect" present
  * @returns {string} with explanation of parsed structure
+ * @see parse()
+ * @see walk()
  */
 exports.describe = function (options) {
     options ??= {};
     let result = "";
+    let testOk = [];
     
     exports.walk(undefined, (regex, figure, matches) => {
         if (result.length !== 0) {
@@ -1245,7 +1724,19 @@ exports.describe = function (options) {
             "Kind: " +regex.object +" of " +regex.type +
             "\nExample:\n" +regex.example +
             "\nResult:\n" +JSON.stringify(figure, null, "\t");
+        
+        if ("expect" in regex && options.test) {
+            const equal = deepEqual(regex.expect, figure);
+            result += "\nTest: " +(equal ? "Ok" : "Failed");
+            if (!equal) {
+                testOk.push(regex.figure);
+            }
+        }
     }, options);
+
+    if (options.test) {
+        result += "\n\nGeneral test: " +(testOk.length === 0 ? "Ok" : ("Failed\n- " +testOk.join("\n- ")));
+    }
 
     return result;
 }
