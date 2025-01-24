@@ -8,7 +8,7 @@ as $fn$
  * Function remove comment characters from string.
  * 
  * @author cmtdoc parser (https://github.com/grobinx/cmtdoc-parser)
- * @created Thu Jan 23 2025 19:06:36 GMT+0100 (czas środkowoeuropejski standardowy)
+ * @created Fri Jan 24 2025 12:22:57 GMT+0100 (czas środkowoeuropejski standardowy)
  * 
  * @param {varchar|text} str string to parse
  * @returns {jsonb}
@@ -39,13 +39,13 @@ begin
     -- @param|arg|argument [{type}] name|[name=value] [description]
     select 'param' as figure, jsonb_agg(row_to_json(r)::jsonb) as object
       from (select r[3] as "type", coalesce(r[7], r[11]) as "name", r[9] as "default", r[13] as "description", string_to_array(trim(r[3]), '|') as "types"
-              from regexp_matches(str, '@(param|arg|argument)(\s*{([^{]*)?})?((\s*\[(([^\[\=]+)\s*(\=\s*([^\[]*)?)?)?\])|(\s+([^\s@<{\()]+)))(\s*([^@]*)?)?', 'g') r) r
+              from regexp_matches(str, '@(param|arg|argument)(\s*{([^{]*)?})?((\s*\[(([^\[\=]+)\s*(\=\s*([^\[]*)?)?)?\])|(\s+([^\s@)<{}]+)))(\s*([^@]*)?)?', 'g') r) r
     having jsonb_agg(row_to_json(r)::jsonb) is not null
     union all
     -- @property|prop [{type}] name|[name=value] [description]
     select 'property' as figure, jsonb_agg(row_to_json(r)::jsonb) as object
       from (select r[3] as "type", coalesce(r[7], r[11]) as "name", r[9] as "default", r[13] as "description", string_to_array(trim(r[3]), '|') as "types"
-              from regexp_matches(str, '@(property|prop)[[:>:]](\s*{([^{]*)?})?((\s*\[(([^\[\=]+)\s*(\=\s*([^\[]*)?)?)?\])|(\s+([^\s@<{\()]+)))(\s*([^@]*)?)?', 'g') r) r
+              from regexp_matches(str, '@(property|prop)[[:>:]](\s*{([^{]*)?})?((\s*\[(([^\[\=]+)\s*(\=\s*([^\[]*)?)?)?\])|(\s+([^\s@)<{}]+)))(\s*([^@]*)?)?', 'g') r) r
     having jsonb_agg(row_to_json(r)::jsonb) is not null
     union all
     -- @async
@@ -103,12 +103,12 @@ begin
     -- @alias path [description]
     select 'alias' as figure, row_to_json(r)::jsonb as object
       from (select r[3] as "path", r[5] as "description"
-              from regexp_matches(str, '@(alias)(\s+([^\s@<{\()]+))(\s*([^@]*)?)?') r) r
+              from regexp_matches(str, '@(alias)(\s+([^\s@)<{}]+))(\s*([^@]*)?)?') r) r
     union all
     -- @augments|extends path [description]
     select 'augments' as figure, jsonb_agg(row_to_json(r)::jsonb) as object
       from (select r[3] as "path", r[5] as "description"
-              from regexp_matches(str, '@(augments|extends)(\s+([^\s@<{\()]+))(\s*([^@]*)?)?', 'g') r) r
+              from regexp_matches(str, '@(augments|extends)(\s+([^\s@)<{}]+))(\s*([^@]*)?)?', 'g') r) r
     having jsonb_agg(row_to_json(r)::jsonb) is not null
     union all
     -- @author author [<email@address>] [(http-page)] [- description]
@@ -120,12 +120,12 @@ begin
     -- @borrows thas_namepath as this_namepath [description]
     select 'borrows' as figure, row_to_json(r)::jsonb as object
       from (select r[3] as "that", r[5] as "this", r[7] as "description"
-              from regexp_matches(str, '@(borrows)(\s+([^\s@<{\()]+))\s*as\s*(\s+([^\s@<{\()]+))(\s*([^@]*)?)?') r) r
+              from regexp_matches(str, '@(borrows)(\s+([^\s@)<{}]+))\s*as\s*(\s+([^\s@)<{}]+))(\s*([^@]*)?)?') r) r
     union all
     -- @class|constructor [{type}] name
     select 'class' as figure, row_to_json(r)::jsonb as object
       from (select r[3] as "type", r[5] as "name"
-              from regexp_matches(str, '@(constructor|class)(\s*{([^{]*)?})?(\s+([^\s@<{\()]+))') r) r
+              from regexp_matches(str, '@(constructor|class)(\s*{([^{]*)?})?(\s+([^\s@)<{}]+))') r) r
     union all
     -- @class|constructor
     select 'class' as figure, to_jsonb(true) as object
@@ -134,11 +134,11 @@ begin
     -- @constatnt|const {type} [name]
     select 'constant' as figure, row_to_json(r)::jsonb as object
       from (select r[3] as "type", r[5] as "name"
-              from regexp_matches(str, '@(constant|const)(\s*{([^{]*)?})(\s+([^\s@<{\()]+))?') r) r
+              from regexp_matches(str, '@(constant|const)(\s*{([^{]*)?})(\s+([^\s@)<{}]+))?') r) r
     union all
     -- @constructs name
     select 'constructs' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(constructs)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(constructs)(\s+([^\s@)<{}]+))') r
     union all
     -- @constructs
     select 'constructs' as figure, to_jsonb(true) as object
@@ -148,11 +148,11 @@ begin
     select 'copyright' as figure, to_jsonb(r[3]) as object
       from regexp_matches(str, '@(copyright)(\s*([^@]*)?)') r
     union all
-    -- @default value
+    -- @default|defaultvalue value
     select 'default' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(default|defaultvalue)[[:>:]](\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(default|defaultvalue)[[:>:]](\s+([^\s@)<{}]+))') r
     union all
-    -- @default
+    -- @default|defaultvalue
     select 'default' as figure, to_jsonb(true) as object
       from regexp_matches(str, '@(default|defaultvalue)[[:>:]]') r
     union all
@@ -171,7 +171,7 @@ begin
     union all
     -- @enum {type} [name]
     select 'enum' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(enum)(\s*{([^{]*)?})(\s+([^\s@<{\()]+))?') r
+      from regexp_matches(str, '@(enum)(\s*{([^{]*)?})(\s+([^\s@)<{}]+))?') r
     union all
     -- @enum
     select 'enum' as figure, to_jsonb(true) as object
@@ -179,7 +179,7 @@ begin
     union all
     -- @event event_name
     select 'event' as figure, to_jsonb(array_agg(r[3])) as object
-      from regexp_matches(str, '@(event)(\s+([^\s@<{\()]+))', 'g') r
+      from regexp_matches(str, '@(event)(\s+([^\s@)<{}]+))', 'g') r
     having array_agg(r[3]) is not null
     union all
     -- @example multiline example, code, comments, etc
@@ -189,11 +189,11 @@ begin
     union all
     -- @exports name
     select 'exports' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(exports)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(exports)(\s+([^\s@)<{}]+))') r
     union all
     -- @external|host name_of_external
     select 'external' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(external|host)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(external|host)(\s+([^\s@)<{}]+))') r
     union all
     -- @file some description
     select 'file' as figure, to_jsonb(r[3]) as object
@@ -201,12 +201,12 @@ begin
     union all
     -- @fires|emits event_name
     select 'event' as figure, to_jsonb(array_agg(r[3])) as object
-      from regexp_matches(str, '@(fires|emits)(\s+([^\s@<{\()]+))', 'g') r
+      from regexp_matches(str, '@(fires|emits)(\s+([^\s@)<{}]+))', 'g') r
     having array_agg(r[3]) is not null
     union all
     -- @function|func|method name
     select 'function' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(function|func|method)[[:>:]](\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(function|func|method)[[:>:]](\s+([^\s@)<{}]+))') r
     union all
     -- @function|func|method
     select 'function' as figure, to_jsonb(true) as object
@@ -214,14 +214,14 @@ begin
     union all
     -- @implements {type}
     select 'implements' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(implements)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(implements)(\s*{([^{]*)?})') r
     union all
     -- @interface name
     select 'interface' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(interface)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(interface)(\s+([^\s@)<{}]+))') r
     union all
     -- @interface
-    select 'interface' as figure, to_jsonb(true) as object
+    select 'true' as figure, to_jsonb(true) as object
       from regexp_matches(str, '@(interface)[[:>:]]') r
     union all
     -- @created date
@@ -234,7 +234,7 @@ begin
     union all
     -- @lends path
     select 'lends' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(lends)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(lends)(\s+([^\s@)<{}]+))') r
     union all
     -- @license identifier|standalone multiline text
     select 'license' as figure, to_jsonb(r[3]) as object
@@ -242,25 +242,25 @@ begin
     union all
     -- @listens event_name
     select 'listens' as figure, to_jsonb(array_agg(r[3])) as object
-      from regexp_matches(str, '@(listens)(\s+([^\s@<{\()]+))', 'g') r
+      from regexp_matches(str, '@(listens)(\s+([^\s@)<{}]+))', 'g') r
     having array_agg(r[3]) is not null
     union all
     -- @member|var|variable {type} [name]
     select 'variable' as figure, row_to_json(r)::jsonb as object
       from (select r[3] as "type", r[5] as "name"
-              from regexp_matches(str, '@(var|variable|member)[[:>:]](\s*{([^{]*)?})(\s+([^\s@<{\()]+))?') r) r
+              from regexp_matches(str, '@(var|variable|member)[[:>:]](\s*{([^{]*)?})(\s+([^\s@)<{}]+))?') r) r
     union all
     -- @memberof[!] name
     select 'memberof' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(memberof|memberof!)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(memberof|memberof!)(\s+([^\s@)<{}]+))') r
     union all
     -- @mixes other_object_path
     select 'mixes' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(mixes)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(mixes)(\s+([^\s@)<{}]+))') r
     union all
     -- @mixin name
     select 'mixin' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(mixin)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(mixin)(\s+([^\s@)<{}]+))') r
     union all
     -- @mixin
     select 'mixin' as figure, to_jsonb(true) as object
@@ -268,7 +268,7 @@ begin
     union all
     -- @module name
     select 'module' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(module)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(module)(\s+([^\s@)<{}]+))') r
     union all
     -- @module
     select 'module' as figure, to_jsonb(true) as object
@@ -276,7 +276,7 @@ begin
     union all
     -- @namespace name
     select 'namespace' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(namespace)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(namespace)(\s+([^\s@)<{}]+))') r
     union all
     -- @namespace
     select 'namespace' as figure, to_jsonb(true) as object
@@ -284,7 +284,7 @@ begin
     union all
     -- @name name
     select 'name' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(name)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(name)(\s+([^\s@)<{}]+))') r
     union all
     -- @package {type}
     select 'package' as figure, to_jsonb(r[3]) as object
@@ -312,7 +312,7 @@ begin
     union all
     -- @requires module_name
     select 'requires' as figure, to_jsonb(array_agg(r[3])) as object
-      from regexp_matches(str, '@(requires)(\s+([^\s@<{\()]+))', 'g') r
+      from regexp_matches(str, '@(requires)(\s+([^\s@)<{}]+))', 'g') r
     having array_agg(r[3]) is not null
     union all
     -- @return|returns {type} [description]
@@ -323,7 +323,7 @@ begin
     -- @see {@link namepath}|namepath [description]
     select 'see' as figure, jsonb_agg(row_to_json(r)::jsonb) as object
       from (select coalesce(r[4], r[6]) as "path", r[8] as "description"
-              from regexp_matches(str, '@(see)((\s*{([^{]*)?})|(\s+([^\s@<{\()]+)))(\s*([^@]*)?)?', 'g') r) r
+              from regexp_matches(str, '@(see)((\s*{([^{]*)?})|(\s+([^\s@)<{}]+)))(\s*([^@]*)?)?', 'g') r) r
     having jsonb_agg(row_to_json(r)::jsonb) is not null
     union all
     -- @since version
@@ -336,7 +336,7 @@ begin
     union all
     -- @this namePath
     select 'this' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(this)(\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(this)(\s+([^\s@)<{}]+))') r
     union all
     -- @throws|exception {type} [description]
     select 'throws' as figure, jsonb_agg(row_to_json(r)::jsonb) as object
@@ -352,11 +352,11 @@ begin
     -- @typedef [{type}] name
     select 'typedef' as figure, row_to_json(r)::jsonb as object
       from (select r[3] as "type", r[5] as "name"
-              from regexp_matches(str, '@(typedef)[[:>:]](\s*{([^{]*)?})?(\s+([^\s@<{\()]+))') r) r
+              from regexp_matches(str, '@(typedef)[[:>:]](\s*{([^{]*)?})?(\s+([^\s@)<{}]+))') r) r
     union all
     -- @tutorial {@link path}|name
     select 'tutorial' as figure, to_jsonb(array_agg(r[4])) as object
-      from regexp_matches(str, '@(tutorial)((\s*{([^{]*)?})|(\s+([^\s@<{\()]+)))', 'g') r
+      from regexp_matches(str, '@(tutorial)((\s*{([^{]*)?})|(\s+([^\s@)<{}]+)))', 'g') r
     having array_agg(r[4]) is not null
     union all
     -- @type {type}
@@ -365,7 +365,7 @@ begin
     union all
     -- @variation number
     select 'variation' as figure, to_jsonb(r[3]) as object
-      from regexp_matches(str, '@(variation)[[:>:]](\s+([^\s@<{\()]+))') r
+      from regexp_matches(str, '@(variation)[[:>:]](\s+([^\s@)<{}]+))') r
     union all
     -- @version version
     select 'version' as figure, to_jsonb(r[3]) as object
@@ -379,7 +379,7 @@ begin
     -- @change|changed|changelog|modified [date] [<author>] [description]
     select 'change' as figure, jsonb_agg(row_to_json(r)::jsonb) as object
       from (select r[3] as "date", r[5] as "author", r[7] as "description"
-              from regexp_matches(str, '@(change|changed|changelog|modified)[[:>:]](\s+([^\s@<{\()]+))?(\s*<([^<]*)>)?(\s*([^@]*)?)?', 'g') r) r
+              from regexp_matches(str, '@(change|changed|changelog|modified)[[:>:]](\s+([^\s@)<{}]+))?(\s*<([^<]*)>)?(\s*([^@]*)?)?', 'g') r) r
     having jsonb_agg(row_to_json(r)::jsonb) is not null
     union all
     -- @isue some description
@@ -390,7 +390,7 @@ begin
     -- @figure|form name([parameters]) [description]
     select 'figure' as figure, jsonb_agg(row_to_json(r)::jsonb) as object
       from (select r[2] as "figure", r[7] as "description"
-              from regexp_matches(str, '@(figure|form)((\s+([^\s@<{\()]+))(\s*\(([^\(]*)\)))(\s*([^@]*)?)?', 'g') r) r
+              from regexp_matches(str, '@(figure|form)((\s+([^\s@)<{}]+))(\s*\(([^\(]*)\)))(\s*([^@]*)?)?', 'g') r) r
     having jsonb_agg(row_to_json(r)::jsonb) is not null
     union all
     -- @template [{type}] name[, name, ...] [- description]
@@ -401,7 +401,7 @@ begin
     union all
     -- @callback name
     select 'callback' as figure, to_jsonb(array_agg(r[3])) as object
-      from regexp_matches(str, '@(callback)(\s+([^\s@<{\()]+))', 'g') r
+      from regexp_matches(str, '@(callback)(\s+([^\s@)<{}]+))', 'g') r
     having array_agg(r[3]) is not null
     union all
     -- @test
