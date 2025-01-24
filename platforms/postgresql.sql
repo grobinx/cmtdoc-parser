@@ -8,7 +8,8 @@ as $fn$
  * Function remove comment characters from string.
  * 
  * @author cmtdoc parser (https://github.com/grobinx/cmtdoc-parser)
- * @created Fri Jan 24 2025 12:22:57 GMT+0100 (czas środkowoeuropejski standardowy)
+ * @created Fri Jan 24 2025 18:40:43 GMT+0100 (czas środkowoeuropejski standardowy)
+ * @version 1.1.8
  * 
  * @param {varchar|text} str string to parse
  * @returns {jsonb}

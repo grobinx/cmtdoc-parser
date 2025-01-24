@@ -1,5 +1,6 @@
 const cmtDocParer = require("../index.js");
 const fs = require("node:fs");
+const { version } = require("../package.json");
 
 /**
  * This is a script that creates a PostgreSQL function that allows you to analyze documentation comments contained eg. in functions
@@ -236,6 +237,7 @@ code =
     ` * \n` +
     ` * @author cmtdoc parser (https://github.com/grobinx/cmtdoc-parser)\n` +
     ` * @created ${new Date().toString()}\n` +
+    ` * @version ${version}\n` +
     ` * \n` +
     ` * @param {varchar|text} ${strVarName} string to parse\n` +
     ` * @returns {jsonb}\n` +
