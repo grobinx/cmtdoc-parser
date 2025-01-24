@@ -5,7 +5,7 @@
  * 
  * @author Andrzej Kałuża
  * @created 2025-01-16
- * @version 1.1.6
+ * @version 1.1.8
  * @module cmtdoc-parser
  */
 
