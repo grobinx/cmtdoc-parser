@@ -1486,7 +1486,7 @@ Result
 ```
 
 ### Figure `@sequence|generator name [description]`
-Document using or define table.
+Document using or define unique sequence.
 
 Example
 ```
