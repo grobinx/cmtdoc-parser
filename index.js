@@ -1513,6 +1513,79 @@ exports.regexRules = [
         expect: {
             "test": true
         }
+    },
+    {
+        figure : "@column {type} name [description]",
+        description : "Document using or define column.",
+        example : "@column {varchar} uniqueid unique id\n@column users.name",
+        match : new RegExp("@(column)" +reCurlyContent +"?" +rePathName +reDescription +"?", "g"),
+        name : "column",
+        object : "array",
+        type : "object",
+        captures: {
+            "3": "type",
+            "5": "name",
+            "7": "description"
+        },
+        expect: {
+            "column": [
+                {
+                    "type": "varchar",
+                    "name": "uniqueid",
+                    "description": "unique id"
+                },
+                {
+                    "name": "users.name"
+                }
+            ]
+        }
+    },
+    {
+        figure : "@table {type} name [description]",
+        description : "Document using or define table.",
+        example : "@table {ordinary} users user list with unique id, name and password\n@table customers",
+        match : new RegExp("@(table)" +reCurlyContent +"?" +rePathName +reDescription +"?", "g"),
+        name : "table",
+        object : "array",
+        type : "object",
+        captures: {
+            "3": "type",
+            "5": "name",
+            "7": "description"
+        },
+        expect: {
+            "table": [
+                {
+                    "type": "ordinary",
+                    "name": "users",
+                    "description": "user list with unique id, name and password"
+                },
+                {
+                    "name": "customers"
+                }
+            ]
+        }
+    },
+    {
+        figure : "@sequence|generator name [description]",
+        description : "Document using or define unique sequence.",
+        example : "@sequence users_id_seq user unique id generator",
+        match : new RegExp("@(sequence|generator)" +rePathName +reDescription +"?", "g"),
+        name : "sequence",
+        object : "array",
+        type : "object",
+        captures: {
+            "3": "name",
+            "5": "description"
+        },
+        expect: {
+            "sequence": [
+                {
+                    "name": "users_id_seq",
+                    "description": "user unique id generator"
+                }
+            ]
+        }
     }
 ]
 

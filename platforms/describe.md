@@ -1436,3 +1436,70 @@ Result
 	"test": true
 }
 ```
+
+### Figure `@column {type} name [description]`
+Document using or define column.
+
+Example
+```
+@column {varchar} uniqueid unique id
+@column users.name
+```
+Result
+```js
+{
+	"column": [
+		{
+			"type": "varchar",
+			"name": "uniqueid",
+			"description": "unique id"
+		},
+		{
+			"name": "users.name"
+		}
+	]
+}
+```
+
+### Figure `@table {type} name [description]`
+Document using or define table.
+
+Example
+```
+@table {ordinary} users user list with unique id, name and password
+@table customers
+```
+Result
+```js
+{
+	"table": [
+		{
+			"type": "ordinary",
+			"name": "users",
+			"description": "user list with unique id, name and password"
+		},
+		{
+			"name": "customers"
+		}
+	]
+}
+```
+
+### Figure `@sequence|generator name [description]`
+Document using or define table.
+
+Example
+```
+@sequence users_id_seq user unique id generator
+```
+Result
+```js
+{
+	"sequence": [
+		{
+			"name": "users_id_seq",
+			"description": "user unique id generator"
+		}
+	]
+}
+```
