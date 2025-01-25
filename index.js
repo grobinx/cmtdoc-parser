@@ -5,7 +5,7 @@
  * 
  * @author Andrzej Kałuża
  * @created 2025-01-16
- * @version 1.1.8
+ * @version 1.1.9
  * @module cmtdoc-parser
  */
 
@@ -1638,8 +1638,8 @@ exports.walk = function (str, callback, options = {}) {
         let content = typeof str === "string" ? str : regex.example;
         const figure = {};
         const matches = [];
-        while ((captures = regex.match.exec(content)) !== null) {
-            if (options.patches) {
+        Array.from(content.matchAll(regex.match), captures => {
+            if (options.matches) {
                 matches.push(captures[0].trim());
             }
             switch (regex.object) {
@@ -1720,7 +1720,7 @@ exports.walk = function (str, callback, options = {}) {
                     break;
                 }
             }
-        }
+        });
         if (Object.keys(figure).length || options.test) {
             callback(regex, figure, matches);
         }

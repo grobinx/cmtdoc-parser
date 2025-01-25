@@ -25,6 +25,9 @@ npm run describe
 ```
 
 The result will be something like this
+
+You can also refer to the [DESCRIBE.md](platforms/describe.md) file for information about figures.
+
 ```
 ...
 
@@ -90,8 +93,6 @@ Result:
 
 ...
 ```
-
-Refer to the [DESCRIBE.md](platforms/describe.md) file for information about figures.
 
 ### Parse single documentation comment
 
