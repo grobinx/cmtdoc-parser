@@ -87,12 +87,12 @@ function genColumns(regexp, rowName) {
         if (value.length > 1) {
             let code = [];
             for (const r of value) {
-                code.push(`${rowName}[${r}]`);
+                code.push(`trim(e' \\t\\n\\r' from ${rowName}[${r}])`);
             }
-            codeColumns.push(`coalesce(${code.join(", ")}) as "${key}"`);
+            codeColumns.push(`trim(e' \\t\\n\\r' from coalesce(${code.join(", ")})) as "${key}"`);
         }
         else {
-            codeColumns.push(`${rowName}[${value[0]}] as "${key}"`);
+            codeColumns.push(`trim(e' \\t\\n\\r' from ${rowName}[${value[0]}]) as "${key}"`);
         }
     }
     for (const [key, split] of Object.entries(splits)) {
@@ -102,12 +102,12 @@ function genColumns(regexp, rowName) {
             for (const r of split.captures) {
                 code.push(`${rowName}[${r}]`);
             }
-            stringToArray = `coalesce(${code.join(", ")})`;
+            stringToArray = `trim(e' \\t\\n\\r' from coalesce(${code.join(", ")}))`;
         }
         else {
-            stringToArray = `${rowName}[${split.captures[0]}]`;
+            stringToArray = `trim(e' \\t\\n\\r' from ${rowName}[${split.captures[0]}])`;
         }
-        codeColumns.push(`string_to_array(trim(${stringToArray}), '${split.delimiter}') as "${key}"`);
+        codeColumns.push(`string_to_array(trim(e' \\t\\n\\r' from ${stringToArray}), '${split.delimiter}') as "${key}"`);
     }
     return codeColumns.join(", ");
 }
@@ -156,7 +156,7 @@ function propertyOfString(regexp, strName, rowName) {
     let codeHaving;
     for (const [key, value] of Object.entries(captures)) {
         codeFigure = `'${key}' as figure`;
-        codeObject = `to_jsonb(${rowName}[${value[0]}]) as object`;
+        codeObject = `to_jsonb(trim(e' \\t\\n\\r' from ${rowName}[${value[0]}])) as object`;
         break;
     }
     let code = 

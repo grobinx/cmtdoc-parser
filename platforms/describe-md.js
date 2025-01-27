@@ -17,10 +17,10 @@ cmtDocParer.walk(undefined, (regex, figure, matches) => {
         code += "\n\n";
     }
     code += 
-        "### Figure `" +regex.figure +"`\n" +
+        "### Figure `" +regex.figure +"`\n\n" +
         regex.description +"\n\n" +
-        "Example\n```\n" +regex.example +"\n```\n" +
-        "Result\n```js\n" +JSON.stringify(figure, null, "\t") +"\n```";
+        "Example\n\n```\n" +regex.example +"\n```\n" +
+        "Result\n\n```js\n" +JSON.stringify(figure, null, "\t") +"\n```";
 });
 
 code = "# Describe js doc figures\n\n" +code;

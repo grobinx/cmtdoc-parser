@@ -5,7 +5,7 @@
  * 
  * @author Andrzej Kałuża
  * @created 2025-01-16
- * @version 1.1.9
+ * @version 1.1.10
  * @module cmtdoc-parser
  */
 
@@ -177,7 +177,7 @@ exports.regexRules = [
         figure : "@async",
         description : "The @async tag indicates that a function is asynchronous, meaning that it was declared using the syntax async function foo() {}. Do not use this tag for other types of asynchronous functions, such as functions that provide a callback.",
         example : "@async",
-        match : /@(async)\b/g,
+        match : /@(async)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -191,7 +191,7 @@ exports.regexRules = [
         figure : "@generator",
         description : "The @generator tag indicates that a function is a generator function, meaning that it was declared using the syntax function* foo() {}.",
         example : "@generator",
-        match : /@(generator)\b/g,
+        match : /@(generator)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -205,7 +205,7 @@ exports.regexRules = [
         figure : "@global",
         description : "The @global tag specifies that a symbol should appear in the documentation as a global symbol. JSDoc ignores the symbol's actual scope within the source file. This tag is especially useful for symbols that are defined locally, then assigned to a global symbol.",
         example : "@global",
-        match : /@(global)\b/g,
+        match : /@(global)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -219,7 +219,7 @@ exports.regexRules = [
         figure : "@hideconstructor",
         description : "The @hideconstructor tag tells JSDoc that the generated documentation should not display the constructor for a class.",
         example : "@hideconstructor",
-        match : /@(hideconstructor)\b/g,
+        match : /@(hideconstructor)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -233,7 +233,7 @@ exports.regexRules = [
         figure : "@ignore",
         description : "The @ignore tag indicates that a symbol in your code should never appear in the documentation. This tag takes precedence over all others.",
         example : "@ignore",
-        match : /@(ignore)\b/g,
+        match : /@(ignore)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -247,7 +247,7 @@ exports.regexRules = [
         figure : "@inner",
         description : "Using the @inner tag will mark a symbol as an inner member of its parent symbol. This means it can be referred to by \"Parent~Child\".",
         example : "@inner",
-        match : /@(inner)\b/g,
+        match : /@(inner)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -261,7 +261,7 @@ exports.regexRules = [
         figure : "@instance",
         description : "Using the @instance tag will mark a symbol as an instance member of its parent symbol. This means it can be referred to by \"Parent#Child\".",
         example : "@instance",
-        match : /@(instance)\b/g,
+        match : /@(instance)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -275,7 +275,7 @@ exports.regexRules = [
         figure : "@override",
         description : "The @override tag indicates that a symbol overrides a symbol with the same name in a parent class.",
         example : "@override",
-        match : /@(override)\b/g,
+        match : /@(override)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -289,7 +289,7 @@ exports.regexRules = [
         figure : "@public",
         description : "The @public tag indicates that a symbol should be documented as if it were public.",
         example : "@public",
-        match : /@(public)\b/g,
+        match : /@(public)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -303,7 +303,7 @@ exports.regexRules = [
         figure : "@readonly",
         description : "The @readonly tag indicates that a symbol is intended to be read-only. Note this is for the purpose of documentation only.",
         example : "@readonly",
-        match : /@(readonly)\b/g,
+        match : /@(readonly)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -317,7 +317,7 @@ exports.regexRules = [
         figure : "@static",
         description : "The @static tag indicates that a symbol is contained within a parent and can be accessed without instantiating the parent.",
         example : "@static",
-        match : /@(static)\b/g,
+        match : /@(static)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -331,7 +331,7 @@ exports.regexRules = [
         figure : "@abstract|virtual",
         description : "This member must be implemented (or overridden) by the inheritor.",
         example : "@abstract",
-        match : /@(abstract|virtual)\b/g,
+        match : /@(abstract|virtual)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -464,7 +464,7 @@ exports.regexRules = [
         figure : "@class|constructor",
         description : "This function is intended to be called with the \"new\" keyword.",
         example : "@class",
-        match : /@(constructor|class)\b/g,
+        match : /@(constructor|class)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -510,7 +510,7 @@ exports.regexRules = [
         figure : "@constructs",
         description : "This function member will be the constructor for the previous class.",
         example : "@constructs",
-        match : /@(constructs)\b/g,
+        match : /@(constructs)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -552,7 +552,7 @@ exports.regexRules = [
         figure : "@default|defaultvalue",
         description : "Document the default.",
         example : "@default",
-        match : /@(default|defaultvalue)\b/g,
+        match : /@(default|defaultvalue)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -580,7 +580,7 @@ exports.regexRules = [
         figure : "@deprecated",
         description : "Document that this is no longer the preferred way.",
         example : "@deprecated",
-        match : /@(deprecated)\b/g,
+        match : /@(deprecated)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -611,21 +611,24 @@ exports.regexRules = [
         description : "Document a collection of related properties.",
         example : "@enum {number}",
         match : new RegExp("@(enum)" +reCurlyContent +rePathName +"?", "g"),
+        name : "enum",
         object : "property",
-        type : "string",
+        type : "object",
         captures: {
-            "3": "enum",
+            "3": "type",
             "5": "name"
         },
         expect: {
-            "enum": "number"
+            "enum": {
+                "type": "number"
+            }
         }
     },
     {
         figure : "@enum",
         description : "Document a collection of related properties.",
-        example : "@enum {number}",
-        match : /@(enum)\b/g,
+        example : "@enum",
+        match : /@(enum)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -746,7 +749,7 @@ exports.regexRules = [
         figure : "@function|func|method",
         description : "Set a function or method.",
         example : "@function",
-        match : /@(function|func|method)\b/g,
+        match : /@(function|func|method)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -788,7 +791,7 @@ exports.regexRules = [
         figure : "@interface",
         description : "Set as interface that others can implement.",
         example : "@interface",
-        match : /@(interface)\b/g,
+        match : /@(interface)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -960,7 +963,7 @@ exports.regexRules = [
         figure : "@module",
         description : "Document a module.",
         example : "@module",
-        match : /@(module)\b/g,
+        match : /@(module)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -989,7 +992,7 @@ exports.regexRules = [
         description : "Set a namespace object.",
         example : "@namespace",
         name : "namespace",
-        match : /@(namespace)\b/g,
+        match : /@(namespace)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -1015,9 +1018,23 @@ exports.regexRules = [
     },
     {
         figure : "@package {type}",
-        description : "This symbol is meant to be package-private.",
+        description : "This symbol is meant to be package-private or named.",
         example : "@package {MyPackage}",
         match : new RegExp("@(package)" +reCurlyContent, "g"),
+        object : "property",
+        type : "string",
+        captures: {
+            "3": "package"
+        },
+        expect: {
+            "package": "MyPackage"
+        }
+    },
+    {
+        figure : "@package name",
+        description : "This symbol is meant to be package-private or named.",
+        example : "@package MyPackage",
+        match : new RegExp("@(package)" +rePathName, "g"),
         object : "property",
         type : "string",
         captures: {
@@ -1031,7 +1048,7 @@ exports.regexRules = [
         figure : "@package",
         description : "This symbol is meant to be package-private.",
         example : "@package",
-        match : /@(package)\b/g,
+        match : /@(package)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -1059,7 +1076,7 @@ exports.regexRules = [
         figure : "@private",
         description : "This symbol is meant to be private.",
         example : "@private",
-        match : /@(private)\b/g,
+        match : /@(private)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -1087,7 +1104,7 @@ exports.regexRules = [
         figure : "@protected",
         description : "This symbol is meant to be protected.",
         example : "@protected",
-        match : /@(protected)\b/g,
+        match : /@(protected)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
@@ -1504,7 +1521,7 @@ exports.regexRules = [
         figure : "@test",
         description : "This symbol indicates that the function is test or testing.",
         example : "@test",
-        match : /@(test)\b/g,
+        match : /@(test)\b\s*(\n|$)/g,
         object : "property",
         type : "match",
         captures: {
