@@ -35,6 +35,8 @@ const reDescription = "(\\s*([^@]*)?)"; // g2 - 2
  * @property {json} split if object you can split value
  * @property {string} split."captures.value".name split to property name
  * @property {string} split."captures.value".delimiter delimiter for split
+ * @property {string[]} used list platform used (js, sql, etc)
+ * @property {json} expect expected result, it's for self test
  * 
  * @isue not work inline {(at)link page} in descriptions
  * @isue does not process first name and double last name separated by a dash (-) in figure author
@@ -50,6 +52,7 @@ exports.regexRules = [
         captures: {
             "1": "root"
         },
+        used : ["js", "sql"],
         expect: {
             "root": "JSDoc 3 is an API documentation generator for JavaScript,\nsimilar to Javadoc or phpDocumentor.\nYou add documentation comments directly to your source code,\nright alongside the code itself.\nThe JSDoc tool will scan your source code and generate an HTML documentation website for you."
         }
@@ -75,6 +78,7 @@ exports.regexRules = [
                 "delimiter" : "|"
             }
         },
+        used : ["js", "sql"],
         expect: {
             "param": [
                 {
@@ -143,6 +147,7 @@ exports.regexRules = [
                 "delimiter" : "|"
             }
         },
+        used : ["js", "sql"],
         expect: {
             "property": [
                 {
@@ -183,6 +188,7 @@ exports.regexRules = [
         captures: {
             "1": "async"
         },
+        used : ["js"],
         expect: {
             "async": true
         }
@@ -197,6 +203,7 @@ exports.regexRules = [
         captures: {
             "1": "generator"
         },
+        used : ["js"],
         expect: {
             "generator": true
         }
@@ -211,6 +218,7 @@ exports.regexRules = [
         captures: {
             "1": "global"
         },
+        used : ["js"],
         expect: {
             "global": true
         }
@@ -225,6 +233,7 @@ exports.regexRules = [
         captures: {
             "1": "hideconstructor"
         },
+        used : ["js"],
         expect: {
             "hideconstructor": true
         }
@@ -239,6 +248,7 @@ exports.regexRules = [
         captures: {
             "1": "ignore"
         },
+        used : ["js", "sql"],
         expect: {
             "ignore": true
         }
@@ -253,6 +263,7 @@ exports.regexRules = [
         captures: {
             "1": "inner"
         },
+        used : ["js"],
         expect: {
             "inner": true
         }
@@ -267,6 +278,7 @@ exports.regexRules = [
         captures: {
             "1": "instance"
         },
+        used : ["js"],
         expect: {
             "instance": true
         }
@@ -281,6 +293,7 @@ exports.regexRules = [
         captures: {
             "1": "override"
         },
+        used : ["js", "sql"],
         expect: {
             "override": true
         }
@@ -295,6 +308,7 @@ exports.regexRules = [
         captures: {
             "1": "public"
         },
+        used : ["js", "sql"],
         expect: {
             "public": true
         }
@@ -309,6 +323,7 @@ exports.regexRules = [
         captures: {
             "1": "readonly"
         },
+        used : ["js", "sql"],
         expect: {
             "readonly": true
         }
@@ -323,6 +338,7 @@ exports.regexRules = [
         captures: {
             "1": "static"
         },
+        used : ["js"],
         expect: {
             "static": true
         }
@@ -337,6 +353,7 @@ exports.regexRules = [
         captures: {
             "1": "abstract"
         },
+        used : ["js"],
         expect: {
             "abstract": true
         }
@@ -351,6 +368,7 @@ exports.regexRules = [
         captures: {
             "2": "access"
         },
+        used : ["js"],
         expect: {
             "access": "package"
         }
@@ -367,6 +385,7 @@ exports.regexRules = [
             "3": "path",
             "5": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "alias": {
                 "path": "trackr.CookieManager"
@@ -385,6 +404,7 @@ exports.regexRules = [
             "3": "path",
             "5": "description"
         },
+        used : ["js"],
         expect: {
             "augments": [
                 {
@@ -407,6 +427,7 @@ exports.regexRules = [
             "7": "page",
             "10": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "author": [
                 {
@@ -434,6 +455,7 @@ exports.regexRules = [
             "5": "this",
             "7": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "borrows": {
                 "that": "trim",
@@ -453,6 +475,7 @@ exports.regexRules = [
             "3": "type",
             "5": "name"
         },
+        used : ["js"],
         expect: {
             "class": {
                 "type": "Person",
@@ -470,6 +493,7 @@ exports.regexRules = [
         captures: {
             "1": "class"
         },
+        used : ["js"],
         expect: {
             "class": true
         }
@@ -486,6 +510,7 @@ exports.regexRules = [
             "3": "type",
             "5": "name"
         },
+        used : ["js", "sql"],
         expect: {
             "constant": {
                 "type": "number"
@@ -502,6 +527,7 @@ exports.regexRules = [
         captures: {
             "3": "constructs"
         },
+        used : ["js"],
         expect: {
             "constructs": "Menu"
         }
@@ -516,6 +542,7 @@ exports.regexRules = [
         captures: {
             "1": "constructs"
         },
+        used : ["js"],
         expect: {
             "constructs": true
         }
@@ -530,6 +557,7 @@ exports.regexRules = [
         captures: {
             "3": "copyright"
         },
+        used : ["js", "sql"],
         expect: {
             "copyright": "Andrzej Kałuża 2025"
         }
@@ -544,6 +572,7 @@ exports.regexRules = [
         captures: {
             "3": "default"
         },
+        used : ["js"],
         expect: {
             "default": "'Ex25622'"
         }
@@ -558,6 +587,7 @@ exports.regexRules = [
         captures: {
             "1": "default"
         },
+        used : ["js"],
         expect: {
             "default": true
         }
@@ -572,6 +602,7 @@ exports.regexRules = [
         captures: {
             "3": "deprecated"
         },
+        used : ["js", "sql"],
         expect: {
             "deprecated": "since version 2.0 use other function"
         }
@@ -586,6 +617,7 @@ exports.regexRules = [
         captures: {
             "1": "deprecated"
         },
+        used : ["js", "sql"],
         expect: {
             "deprecated": true
         }
@@ -600,6 +632,7 @@ exports.regexRules = [
         captures: {
             "3": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "description": [
                 "Add two numbers."
@@ -618,6 +651,7 @@ exports.regexRules = [
             "3": "type",
             "5": "name"
         },
+        used : ["js", "sql"],
         expect: {
             "enum": {
                 "type": "number"
@@ -634,6 +668,7 @@ exports.regexRules = [
         captures: {
             "1": "enum"
         },
+        used : ["js", "sql"],
         expect: {
             "enum": true
         }
@@ -649,6 +684,7 @@ exports.regexRules = [
         captures: {
             "3": "event"
         },
+        used : ["js"],
         expect: {
             "event": [
                 "Hurl#snowball"
@@ -665,6 +701,7 @@ exports.regexRules = [
         captures: {
             "2": "example"
         },
+        used : ["js"],
         expect: {
             "example": [
                 "// returns 2\nglobalNS.method1(5, 10);",
@@ -682,6 +719,7 @@ exports.regexRules = [
         captures: {
             "3": "exports"
         },
+        used : ["js"],
         expect: {
             "exports": "Privare"
         }
@@ -696,6 +734,7 @@ exports.regexRules = [
         captures: {
             "3": "external"
         },
+        used : ["js"],
         expect: {
             "external": "\"jQuery.fn\""
         }
@@ -710,6 +749,7 @@ exports.regexRules = [
         captures: {
             "3": "file"
         },
+        used : ["js"],
         expect: {
             "file": "Manages the configuration settings for the widget."
         }
@@ -725,6 +765,7 @@ exports.regexRules = [
         captures: {
             "3": "event"
         },
+        used : ["js"],
         expect: {
             "event": [
                 "Milkshake#drain"
@@ -741,6 +782,7 @@ exports.regexRules = [
         captures: {
             "3": "function"
         },
+        used : ["js", "sql"],
         expect: {
             "function": "myFunction"
         }
@@ -755,6 +797,7 @@ exports.regexRules = [
         captures: {
             "1": "function"
         },
+        used : ["js", "sql"],
         expect: {
             "function": true
         }
@@ -769,6 +812,7 @@ exports.regexRules = [
         captures: {
             "3": "implements"
         },
+        used : ["js"],
         expect: {
             "implements": "Color"
         }
@@ -783,6 +827,7 @@ exports.regexRules = [
         captures: {
             "3": "interface"
         },
+        used : ["js"],
         expect: {
             "interface": "Color"
         }
@@ -796,6 +841,10 @@ exports.regexRules = [
         type : "match",
         captures: {
             "interface": true
+        },
+        used : ["js"],
+        expect: {
+            "interface": true
         }
     },
     {
@@ -808,6 +857,7 @@ exports.regexRules = [
         captures: {
             "3": "created"
         },
+        used : ["js", "sql"],
         expect: {
             "created": "2025-01-17"
         }
@@ -822,6 +872,7 @@ exports.regexRules = [
         captures: {
             "2": "kind"
         },
+        used : ["js"],
         expect: {
             "kind": "class"
         }
@@ -836,6 +887,7 @@ exports.regexRules = [
         captures: {
             "3": "lends"
         },
+        used : ["js"],
         expect: {
             "lends": "Person.prototype"
         }
@@ -850,6 +902,7 @@ exports.regexRules = [
         captures: {
             "3": "license"
         },
+        used : ["js", "sql"],
         expect: {
             "license": "The MIT License is a permissive software license originating at the Massachusetts Institute of Technology (MIT)[6] in the late 1980s.[7] As a permissive license, it puts very few restrictions on reuse and therefore has high license compatibility.[8][9]\nUnlike copyleft software licenses, the MIT License also permits reuse within proprietary software, provided that all copies of the software or its substantial portions include a copy of the terms of the MIT License and also a copyright notice.[9][10] In 2015, the MIT License was the most popular software license on GitHub,[11] and was still the most popular in 2024.[12]\nNotable projects that use the MIT License include the X Window System, Ruby on Rails, Node.js, Lua, jQuery, .NET, Angular, and React."
         }
@@ -864,6 +917,7 @@ exports.regexRules = [
         captures: {
             "3": "listens"
         },
+        used : ["js"],
         expect: {
             "listens": [
                 "module:hurler~event:snowball"
@@ -882,6 +936,7 @@ exports.regexRules = [
             "3": "type",
             "5": "name"
         },
+        used : ["js", "sql"],
         expect: {
             "variable": {
                 "type": "string",
@@ -899,6 +954,7 @@ exports.regexRules = [
         captures: {
             "3": "memberof"
         },
+        used : ["js"],
         expect: {
             "memberof": "Tools"
         }
@@ -913,6 +969,7 @@ exports.regexRules = [
         captures: {
             "3": "mixes"
         },
+        used : ["js"],
         expect: {
             "mixes": "Eventful"
         }
@@ -927,6 +984,7 @@ exports.regexRules = [
         captures: {
             "3": "mixin"
         },
+        used : ["js"],
         expect: {
             "mixin": "Future"
         }
@@ -941,6 +999,7 @@ exports.regexRules = [
         captures: {
             "1": "mixin"
         },
+        used : ["js"],
         expect: {
             "mixin": true
         }
@@ -955,6 +1014,7 @@ exports.regexRules = [
         captures: {
             "3": "module"
         },
+        used : ["js"],
         expect: {
             "module": "MyModule"
         }
@@ -969,6 +1029,7 @@ exports.regexRules = [
         captures: {
             "1": "module"
         },
+        used : ["js", "sql"],
         expect: {
             "module": true
         }
@@ -983,6 +1044,7 @@ exports.regexRules = [
         captures: {
             "3": "namespace"
         },
+        used : ["js"],
         expect: {
             "namespace": "MyNamespace"
         }
@@ -998,6 +1060,7 @@ exports.regexRules = [
         captures: {
             "1": "namespace"
         },
+        used : ["js"],
         expect: {
             "namespace": true
         }
@@ -1012,6 +1075,7 @@ exports.regexRules = [
         captures: {
             "3": "name"
         },
+        used : ["js"],
         expect: {
             "name": "highlightSearchTerm"
         }
@@ -1026,6 +1090,7 @@ exports.regexRules = [
         captures: {
             "3": "package"
         },
+        used : ["js"],
         expect: {
             "package": "MyPackage"
         }
@@ -1040,6 +1105,7 @@ exports.regexRules = [
         captures: {
             "3": "package"
         },
+        used : ["js", "sql"],
         expect: {
             "package": "MyPackage"
         }
@@ -1054,6 +1120,7 @@ exports.regexRules = [
         captures: {
             "1": "package"
         },
+        used : ["js"],
         expect: {
             "package": true
         }
@@ -1068,6 +1135,7 @@ exports.regexRules = [
         captures: {
             "3": "private"
         },
+        used : ["js"],
         expect: {
             "private": "integer"
         }
@@ -1082,6 +1150,7 @@ exports.regexRules = [
         captures: {
             "1": "private"
         },
+        used : ["js", "sql"],
         expect: {
             "private": true
         }
@@ -1096,6 +1165,7 @@ exports.regexRules = [
         captures: {
             "3": "protected"
         },
+        used : ["js"],
         expect: {
             "protected": "Number"
         }
@@ -1110,6 +1180,7 @@ exports.regexRules = [
         captures: {
             "1": "protected"
         },
+        used : ["js"],
         expect: {
             "protected": true
         }
@@ -1124,6 +1195,7 @@ exports.regexRules = [
         captures: {
             "3": "requires"
         },
+        used : ["js", "sql"],
         expect: {
             "requires": [
                 "module:xyzcorp/helper",
@@ -1143,6 +1215,7 @@ exports.regexRules = [
             "3": "type",
             "5": "description"
         },
+        used : ["js", "sql"],
         split : {
             "type" : {
                 name : "types",
@@ -1172,6 +1245,7 @@ exports.regexRules = [
             "6": "path",
             "8": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "see": [
                 {
@@ -1203,6 +1277,7 @@ exports.regexRules = [
         captures: {
             "3": "since"
         },
+        used : ["js", "sql"],
         expect: {
             "since": "1.0.1"
         }
@@ -1217,6 +1292,7 @@ exports.regexRules = [
         captures: {
             "3": "summary"
         },
+        used : ["js", "sql"],
         expect: {
             "summary": "A concise summary."
         }
@@ -1231,6 +1307,7 @@ exports.regexRules = [
         captures: {
             "3": "this"
         },
+        used : ["js"],
         expect: {
             "this": "Greeter"
         }
@@ -1247,6 +1324,7 @@ exports.regexRules = [
             "3": "type",
             "5": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "throws": [
                 {
@@ -1272,6 +1350,7 @@ exports.regexRules = [
         captures: {
             "3": "todo"
         },
+        used : ["js", "sql"],
         expect: {
             "todo": [
                 "Write the documentation.",
@@ -1291,6 +1370,7 @@ exports.regexRules = [
             "3": "type",
             "5": "name"
         },
+        used : ["js"],
         expect: {
             "typedef": {
                 "type": "Object",
@@ -1309,6 +1389,7 @@ exports.regexRules = [
             "4": "tutorial",
             "6": "tutorial"
         },
+        used : ["js", "sql"],
         expect: {
             "tutorial": [
                 "tutorial-1",
@@ -1326,6 +1407,7 @@ exports.regexRules = [
         captures: {
             "3": "type"
         },
+        used : ["js"],
         expect: {
             "type": "number"
         }
@@ -1340,6 +1422,7 @@ exports.regexRules = [
         captures: {
             "3": "variation"
         },
+        used : ["js", "sql"],
         expect: {
             "variation": "2"
         }
@@ -1354,6 +1437,7 @@ exports.regexRules = [
         captures: {
             "3": "version"
         },
+        used : ["js", "sql"],
         expect: {
             "version": "0.0.1 Beta"
         }
@@ -1370,6 +1454,7 @@ exports.regexRules = [
             "3": "type",
             "5": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "yield": {
                 "type": "number",
@@ -1390,6 +1475,7 @@ exports.regexRules = [
             "5": "author",
             "7": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "change": [
                 {
@@ -1418,6 +1504,7 @@ exports.regexRules = [
         captures: {
             "3": "isue"
         },
+        used : ["js", "sql"],
         expect: {
             "isue": [
                 "sometimes returns null",
@@ -1437,6 +1524,7 @@ exports.regexRules = [
             "2": "figure",
             "7": "description"
         },
+        used : ["js"],
         expect: {
             "figure": [
                 {
@@ -1477,6 +1565,7 @@ exports.regexRules = [
                 delimiter : ","
             }
         },
+        used : ["js"],
         expect: {
             "template": [
                 {
@@ -1511,6 +1600,7 @@ exports.regexRules = [
         captures: {
             "3": "callback"
         },
+        used : ["js"],
         expect: {
             "callback": [
                 "Predicate"
@@ -1527,6 +1617,7 @@ exports.regexRules = [
         captures: {
             "1": "test"
         },
+        used : ["js", "sql"],
         expect: {
             "test": true
         }
@@ -1544,6 +1635,7 @@ exports.regexRules = [
             "5": "name",
             "7": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "column": [
                 {
@@ -1570,6 +1662,7 @@ exports.regexRules = [
             "5": "name",
             "7": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "table": [
                 {
@@ -1595,6 +1688,7 @@ exports.regexRules = [
             "3": "name",
             "5": "description"
         },
+        used : ["js", "sql"],
         expect: {
             "sequence": [
                 {

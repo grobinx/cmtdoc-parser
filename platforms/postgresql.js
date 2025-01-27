@@ -118,6 +118,7 @@ function arrayOfObject(regexp, strName, rowName) {
         `    select '${regexp.name}' as figure, jsonb_agg(row_to_json(${rowName})::jsonb) as object\n` +
         `      from (select ${columnsCode}\n` +
         `              from regexp_matches(${strName}, '${regexp.match_postgres}', 'g') ${rowName}) ${rowName}\n` +
+        `     where '${regexp.name}' = any (l_figures)\n` +
         `    having jsonb_agg(row_to_json(${rowName})::jsonb) is not null`;
     return code;
 }
@@ -128,14 +129,15 @@ function arrayOfString(regexp, strName, rowName) {
     let codeObject;
     let codeHaving;
     for (const [key, value] of Object.entries(captures)) {
-        codeFigure = `'${key}' as figure`;
+        codeFigure = key;
         codeObject = `to_jsonb(array_agg(${rowName}[${value[0]}])) as object`;
         codeHaving = `${rowName}[${value[0]}]`;
         break;
     }
     let code = 
-        `    select ${codeFigure}, ${codeObject}\n` +
+        `    select '${codeFigure}' as figure, ${codeObject}\n` +
         `      from regexp_matches(${strName}, '${regexp.match_postgres}', 'g') ${rowName}\n` +
+        `     where '${codeFigure}' = any (l_figures)\n` +
         `    having array_agg(${codeHaving}) is not null`;
     return code;
 }
@@ -145,7 +147,8 @@ function propertyOfObject(regexp, strName, rowName) {
     let code = 
         `    select '${regexp.name}' as figure, row_to_json(${rowName})::jsonb as object\n` +
         `      from (select ${columnsCode}\n` +
-        `              from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}) ${rowName}`
+        `              from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}) ${rowName}\n` +
+        `     where '${regexp.name}' = any (l_figures)`;
     return code;
 }
 
@@ -155,13 +158,14 @@ function propertyOfString(regexp, strName, rowName) {
     let codeObject;
     let codeHaving;
     for (const [key, value] of Object.entries(captures)) {
-        codeFigure = `'${key}' as figure`;
+        codeFigure = key;
         codeObject = `to_jsonb(trim(e' \\t\\n\\r' from ${rowName}[${value[0]}])) as object`;
         break;
     }
     let code = 
-        `    select ${codeFigure}, ${codeObject}\n` +
-        `      from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}`
+        `    select '${codeFigure}' as figure, ${codeObject}\n` +
+        `      from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}` +
+        (codeFigure !== "root" ? `\n     where '${codeFigure}' = any (l_figures)` : ``)
     return code;
 }
 
@@ -171,19 +175,24 @@ function propertyOfMatch(regexp, strName, rowName) {
     let codeObject;
     let codeHaving;
     for (const [key, value] of Object.entries(captures)) {
-        codeFigure = `'${key}' as figure`;
+        codeFigure = key;
         codeObject = `to_jsonb(true) as object`;
         break;
     }
     let code = 
-        `    select ${codeFigure}, ${codeObject}\n` +
-        `      from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}`
+        `    select '${codeFigure}' as figure, ${codeObject}\n` +
+        `      from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}\n` +
+        `     where '${codeFigure}' = any (l_figures)`
     return code;
 }
 
 let code = "";
 let selects = [];
 for (const regexp of cmtDocParer.regexRules) {
+    if (!regexp.used.includes("sql")) {
+        continue;
+    }
+
     let figure = "    -- " +regexp.figure;
     code += (code.length ? "\n" : "");
 
@@ -253,6 +262,8 @@ code =
     ` *            and p.prokind in ('p', 'f')) p\n` +
     ` *  where p.doc is not null\n` +
     ` */\n` +
+    `declare\n` +
+    `  l_figures text[];\n` +
     `begin\n` +
     `  if position('/**' in str) then\n` +
     `    ${strVarName} := string_agg(substring(line from '^\\s*\\*\\s*(.*)'), e'\\n')\n` +
@@ -260,6 +271,8 @@ code =
     `     where trim(line) not in ('/**', '*/');\n` +
     `  end if;\n` +
     `  --\n` +
+    `  l_figures := array_agg(distinct f) from (select unnest(regexp_matches(str, '@(\\w+)', 'g')) f) u;\n` +
+      `  --\n` +
     `  return jsonb_object_agg(${rowName}.figure, ${rowName}.object)\n` +
     `    from (${selects.join("\n    union all\n")}) ${rowName};\n` +
     `end;\n` +
