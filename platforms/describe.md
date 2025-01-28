@@ -3,8 +3,8 @@
 ## Table of content
 
 1. [This is root description](#Figure-This-is-root-description)
-1. [\@param|arg|argument [{type}] name|[name=value] [description]](#Figure-paramargargument-type-namename=value-description)
-1. [\@property|prop [{type}] name|[name=value] [description]](#Figure-propertyprop-type-namename=value-description)
+1. [\@param|arg|argument [{type}] name|[name=value] [description]](#Figure-paramargargument-type-namenamevalue-description)
+1. [\@property|prop [{type}] name|[name=value] [description]](#Figure-propertyprop-type-namenamevalue-description)
 1. [\@async](#Figure-async)
 1. [\@generator](#Figure-generator)
 1. [\@global](#Figure-global)
@@ -20,7 +20,7 @@
 1. [\@access package|private|protected|public](#Figure-access-packageprivateprotectedpublic)
 1. [\@alias path [description]](#Figure-alias-path-description)
 1. [\@augments|extends path [description]](#Figure-augmentsextends-path-description)
-1. [\@author author [<email\@address>] [(http-page)] [- description]](#Figure-author-author-<emailaddress>-(http-page)-description)
+1. [\@author author [<email\@address>] [(http-page)] [- description]](#Figure-author-author-emailaddress-(http-page)-description)
 1. [\@borrows thas_namepath as this_namepath [description]](#Figure-borrows-thas_namepath-as-this_namepath-description)
 1. [\@class|constructor [{type}] name](#Figure-classconstructor-type-name)
 1. [\@class|constructor](#Figure-classconstructor)
@@ -82,7 +82,7 @@
 1. [\@variation number](#Figure-variation-number)
 1. [\@version version](#Figure-version-version)
 1. [\@yield|yields|next [{type}] [description]](#Figure-yieldyieldsnext-type-description)
-1. [\@change|changed|changelog|modified [date] [<author>] [description]](#Figure-changechangedchangelogmodified-date-<author>-description)
+1. [\@change|changed|changelog|modified [date] [<author>] [description]](#Figure-changechangedchangelogmodified-date-author-description)
 1. [\@isue some description](#Figure-isue-some-description)
 1. [\@figure|form name([parameters]) [description]](#Figure-figureform-name(parameters)-description)
 1. [\@template [{type}] name[, name, ...] [- description]](#Figure-template-type-name,-name,-...-description)
