@@ -22,7 +22,7 @@ cmtDocParer.walk(undefined, (regex, figure, matches) => {
     }
     tocCode += 
       "1. [" +regex.figure.replaceAll("@", "\\@") +"]" +
-      "(#" +("Figure " +regex.figure).replaceAll(/([@{}\[\]\=\*\|\<\>\.\\\/\~\#\ ])/g, "-").replaceAll(/([\-]+)/g, "-") +")";
+      "(#" +("Figure " +regex.figure).replaceAll(/([\@\|\[\]\{\}\#\\\/])/g, "").replaceAll(/([\ ])/g, "-").replaceAll(/([\-]+)/g, "-") +")";
     code += 
         "## Figure " +regex.figure.replaceAll("@", "\\@") +"\n\n" +
         regex.description +"\n\n" +
