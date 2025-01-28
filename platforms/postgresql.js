@@ -252,8 +252,8 @@ code =
     ` * @returns {jsonb}\n` +
     ` * @example\n` +
     ` * select p.proname, ${functionName}(p.doc) as doc, p.arguments, p.description\n` +
-    ` *   from (select p.proname, substring(pg_get_functiondef(p.oid) from '\\/\\*\\*.*\\*\\/') as doc, \n` +
-    ` *                coalesce(p.prosrc, '') arguments,\n` +
+    ` *   from (select p.proname, substring(p.prosrc from '\\/\\*\\*.*\\*\\/') as doc, \n` +
+    ` *                coalesce(pg_get_function_arguments(p.oid), '') arguments,\n` +
     ` *                d.description\n` +
     ` *           from pg_proc p\n` +
     ` *                join pg_namespace n on n.oid = p.pronamespace\n` +
