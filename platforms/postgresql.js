@@ -112,13 +112,22 @@ function genColumns(regexp, rowName) {
     return codeColumns.join(", ");
 }
 
+function formsCondition(figureName, regexp) {
+    if (regexp.forms) {
+        return `array[${regexp.forms.reduce((acc, val) => (acc ? acc +', ' : '') +"'" +val +"'", null)}] && l_figures`;
+    }
+    else {
+        return `'${figureName}' = any (l_figures)`;
+    }
+}
+
 function arrayOfObject(regexp, strName, rowName) {
     let columnsCode = genColumns(regexp, "r");
     let code = 
         `    select '${regexp.name}' as figure, jsonb_agg(row_to_json(${rowName})::jsonb) as object\n` +
         `      from (select ${columnsCode}\n` +
         `              from regexp_matches(${strName}, '${regexp.match_postgres}', 'g') ${rowName}) ${rowName}\n` +
-        `     where '${regexp.name}' = any (l_figures)\n` +
+        `     where ${formsCondition(regexp.name, regexp)}\n` +
         `    having jsonb_agg(row_to_json(${rowName})::jsonb) is not null`;
     return code;
 }
@@ -137,7 +146,7 @@ function arrayOfString(regexp, strName, rowName) {
     let code = 
         `    select '${codeFigure}' as figure, ${codeObject}\n` +
         `      from regexp_matches(${strName}, '${regexp.match_postgres}', 'g') ${rowName}\n` +
-        `     where '${codeFigure}' = any (l_figures)\n` +
+        `     where ${formsCondition(codeFigure, regexp)}\n` +
         `    having array_agg(${codeHaving}) is not null`;
     return code;
 }
@@ -148,7 +157,7 @@ function propertyOfObject(regexp, strName, rowName) {
         `    select '${regexp.name}' as figure, row_to_json(${rowName})::jsonb as object\n` +
         `      from (select ${columnsCode}\n` +
         `              from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}) ${rowName}\n` +
-        `     where '${regexp.name}' = any (l_figures)`;
+        `     where ${formsCondition(regexp.name, regexp)}`;
     return code;
 }
 
@@ -165,7 +174,7 @@ function propertyOfString(regexp, strName, rowName) {
     let code = 
         `    select '${codeFigure}' as figure, ${codeObject}\n` +
         `      from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}` +
-        (codeFigure !== "root" ? `\n     where '${codeFigure}' = any (l_figures)` : ``)
+        (codeFigure !== "root" ? `\n     where ${formsCondition(codeFigure, regexp)}` : ``)
     return code;
 }
 
@@ -182,7 +191,7 @@ function propertyOfMatch(regexp, strName, rowName) {
     let code = 
         `    select '${codeFigure}' as figure, ${codeObject}\n` +
         `      from regexp_matches(${strName}, '${regexp.match_postgres}') ${rowName}\n` +
-        `     where '${codeFigure}' = any (l_figures)`
+        `     where ${formsCondition(codeFigure, regexp)}`
     return code;
 }
 

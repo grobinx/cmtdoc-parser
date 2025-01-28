@@ -59,6 +59,7 @@ exports.regexRules = [
     },
     {
         figure : "@param|arg|argument [{type}] name|[name=value] [description]",
+        forms : ["param", "arg", "argument"],
         description : "The @param tag provides the name, type, and description of a function parameter.",
         example : "@param {string|any[]|*} aid\n@param {string} [alabel_text=abc] if the LABEL is to appear\n@param {attributes} alabel_attrs extra attributes for LABEL\n@param {attributes} aselect_attrs extra attribues for INPUT\n@arg {string=} somebody - Somebody's name.\n@param <V> the value of the element",
         name : "param",
@@ -128,6 +129,7 @@ exports.regexRules = [
     },
     {
         figure : "@property|prop [{type}] name|[name=value] [description]",
+        forms : ["property", "prop"],
         description : "The @property tag is a way to easily document a list of static properties of a class, namespace or other object.",
         example : "@property {object|json} defaults The default values for parties.\n@prop {number} defaults.players The default number of players.\n@property {number} defaults.treasure.gold How much gold the party starts with.",
         name : "property",
@@ -361,6 +363,7 @@ exports.regexRules = [
     },
     {
         figure : "@abstract|virtual",
+        forms : ["abstract", "virtual"],
         description : "This member must be implemented (or overridden) by the inheritor.",
         example : "@abstract",
         match : /@(abstract|virtual)\b\s*(\n|$)/g,
@@ -410,6 +413,7 @@ exports.regexRules = [
     },
     {
         figure : "@augments|extends path [description]",
+        forms : ["augments", "extends"],
         description : "Indicate that a symbol inherits from, and adds to, a parent symbol.",
         example : "@augments Animal",
         name : "augments",
@@ -481,6 +485,7 @@ exports.regexRules = [
     },
     {
         figure : "@class|constructor [{type}] name",
+        forms : ["class", "constructor"],
         description : "This function is intended to be called with the \"new\" keyword.",
         example : "@class {Person} Human",
         name : "class",
@@ -501,6 +506,7 @@ exports.regexRules = [
     },
     {
         figure : "@class|constructor",
+        forms : ["class", "constructor"],
         description : "This function is intended to be called with the \"new\" keyword.",
         example : "@class",
         match : /@(constructor|class)\b\s*(\n|$)/g,
@@ -516,6 +522,7 @@ exports.regexRules = [
     },
     {
         figure : "@constatnt|const {type} [name]",
+        forms : ["constatnt", "const"],
         description : "The @constant tag is used to mark the documentation as belonging to a symbol that is a constant.",
         example : "@constant {number}",
         name : "constant",
@@ -580,6 +587,7 @@ exports.regexRules = [
     },
     {
         figure : "@default|defaultvalue value",
+        forms : ["default", "defaultvalue"],
         description : "Document the default value.",
         example : "@default 'Ex25622'",
         match : new RegExp("@(default|defaultvalue)\\b" +rePathName, "g"),
@@ -595,6 +603,7 @@ exports.regexRules = [
     },
     {
         figure : "@default|defaultvalue",
+        forms : ["default", "defaultvalue"],
         description : "Document the default.",
         example : "@default",
         match : /@(default|defaultvalue)\b\s*(\n|$)/g,
@@ -640,6 +649,7 @@ exports.regexRules = [
     },
     {
         figure : "@description|desc|classdesc some description",
+        forms : ["description", "desc", "classdesc"],
         description : "Describe a symbol.",
         example : "@description Add two numbers.",
         match : new RegExp("@(description|desc|classdesc)\\b" +reDescription, "g"),
@@ -742,6 +752,7 @@ exports.regexRules = [
     },
     {
         figure : "@external|host name_of_external",
+        forms : ["external", "host"],
         description : "Identifies an external class, namespace, or module.",
         example : "@external \"jQuery.fn\"",
         match : new RegExp("@(external|host)" +rePathName, "g"),
@@ -772,6 +783,7 @@ exports.regexRules = [
     },
     {
         figure : "@fires|emits event_name",
+        forms : ["fires", "emits"],
         description : "Describe the events this method may fire.",
         example : "@fires Milkshake#drain",
         name : "fire",
@@ -790,6 +802,7 @@ exports.regexRules = [
     },
     {
         figure : "@function|func|method name",
+        forms : ["function", "func", "method"],
         description : "Describe a function or method.",
         example : "@function myFunction",
         match : new RegExp("@(function|func|method)\\b" +rePathName, "g"),
@@ -805,6 +818,7 @@ exports.regexRules = [
     },
     {
         figure : "@function|func|method",
+        forms : ["function", "func", "method"],
         description : "Set a function or method.",
         example : "@function",
         match : /@(function|func|method)\b\s*(\n|$)/g,
@@ -942,6 +956,7 @@ exports.regexRules = [
     },
     {
         figure : "@member|var|variable {type} [name]",
+        forms : ["member", "var", "variable"],
         description : "Document a member.",
         example : "@var {string} regexRule",
         name : "variable",
@@ -1221,6 +1236,7 @@ exports.regexRules = [
     },
     {
         figure : "@return|returns {type} [description]",
+        forms : ["return", "returns"],
         description : "Document the return value of a function.",
         example : "@returns {number} Sum of a and b",
         name : "returns",
@@ -1330,6 +1346,7 @@ exports.regexRules = [
     },
     {
         figure : "@throws|exception {type} [description]",
+        forms : ["throws", "exception"],
         description : "Describe what errors could be thrown.",
         example : "@throws {InvalidArgumentException}\n@throws Will throw an error if the argument is null.\n@throws {DivideByZero} Argument x must be non-zero.",
         name : "throws",
@@ -1460,6 +1477,7 @@ exports.regexRules = [
     },
     {
         figure : "@yield|yields|next [{type}] [description]",
+        forms : ["yield", "yields", "next"],
         description : "Document the value yielded by a generator function.",
         example : "@yields {number}\n@yields {number} The next number in the Fibonacci sequence.]",
         name : "yield",
@@ -1480,6 +1498,7 @@ exports.regexRules = [
     },
     {
         figure : "@change|changed|changelog|modified [date] [<author>] [description]",
+        forms : ["change", "changed", "changelog", "modified"],
         description : "Change log of object.",
         example : "@changed 2025-01-01 <Andrzej Kałuża> some description\n@changed <Andrzej Kałuża> some description\n@changed 2025-01-05 some description",
         name : "change",
@@ -1530,6 +1549,7 @@ exports.regexRules = [
     },
     {
         figure : "@figure|form name([parameters]) [description]",
+        forms : ["figure", "form"],
         description : "Document function form.",
         example : "@figure getData() returns all data as array\n@figure getData(options) returns all data as array\n@figure getData(uniqueId | index | object related with row, options) returns row data as JSON",
         name : "figure",
@@ -1721,6 +1741,7 @@ exports.regexRules = [
     },
     {
         figure : "@sequence|generator name [description]",
+        forms : ["sequence", "generator"],
         description : "Document using or define unique sequence.",
         example : "@sequence users_id_seq user unique id generator",
         match : new RegExp("@(sequence|generator)" +rePathName +reDescription +"?", "g"),
