@@ -5,7 +5,7 @@
  * 
  * @author Andrzej Kałuża
  * @created 2025-01-16
- * @version 1.1.10
+ * @version 1.1.12
  * @module cmtdoc-parser
  */
 
@@ -145,6 +145,10 @@ exports.regexRules = [
             "type" : {
                 "name" : "types",
                 "delimiter" : "|"
+            },
+            "name" : {
+                "name" : "members",
+                "delimiter" : "."
             }
         },
         used : ["js", "sql"],
@@ -157,6 +161,9 @@ exports.regexRules = [
                     "types": [
                         "object",
                         "json"
+                    ],
+                    "members": [
+                        "defaults"
                     ]
                 },
                 {
@@ -165,6 +172,10 @@ exports.regexRules = [
                     "description": "The default number of players.",
                     "types": [
                         "number"
+                    ],
+                    "members": [
+                        "defaults",
+                        "players"
                     ]
                 },
                 {
@@ -173,6 +184,11 @@ exports.regexRules = [
                     "description": "How much gold the party starts with.",
                     "types": [
                         "number"
+                    ],
+                    "members": [
+                        "defaults",
+                        "treasure",
+                        "gold"
                     ]
                 }
             ]
@@ -840,7 +856,7 @@ exports.regexRules = [
         object : "property",
         type : "match",
         captures: {
-            "interface": true
+            "1" : "interface"
         },
         used : ["js"],
         expect: {

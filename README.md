@@ -255,5 +255,5 @@ select p.proname, jsdoc_parse(p.doc) as doc, p.arguments, p.description
  where p.doc is not null
 ```
 
-On a server (24 cores) Postgres 9.6, in a schema with 1600 functions, 450 of which have comments, the query was completed in 18 seconds.<br />
-On a server (4 cores) Postgre 15, in a schema with 40 functions, 30 of which have comments, the query was completed in 150ms.
+On a server (24 cores) Postgres 9.6, in a schema with 1600 functions, 450 of which have comments, the query was completed in 1-2 seconds.<br />
+On a server (4 cores) Postgre 15, in a schema with 40 functions, 30 of which have comments, the query was completed < 100ms.

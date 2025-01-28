@@ -11,19 +11,30 @@ const fs = require("node:fs");
  */
 
 let code = "";
+let tocCode = "";
 
 cmtDocParer.walk(undefined, (regex, figure, matches) => {
     if (code.length !== 0) {
         code += "\n\n";
     }
+    if (tocCode.length !== 0) {
+        tocCode += "\n";
+    }
+    tocCode += 
+      "1. [" +regex.figure.replaceAll("@", "\\@") +"]" +
+      "(#" +("Figure " +regex.figure).replaceAll(/([@{}\[\]\=\*\|\<\>\.\\\/\~\#\ ])/g, "-").replaceAll(/([\-]+)/g, "-") +")";
     code += 
-        "### Figure `" +regex.figure +"`\n\n" +
+        "## Figure " +regex.figure.replaceAll("@", "\\@") +"\n\n" +
         regex.description +"\n\n" +
-        "Example\n\n```\n" +regex.example +"\n```\n" +
+        "Used in " +JSON.stringify(regex.used) +"\n\n" +
+        "Example\n\n```\n" +regex.example +"\n```\n\n" +
         "Result\n\n```js\n" +JSON.stringify(figure, null, "\t") +"\n```";
 });
 
-code = "# Describe js doc figures\n\n" +code;
+code = 
+  "# Describe js doc figures\n\n" +
+  "## Table of content\n\n" +tocCode +"\n\n" +
+  code;
 
 fs.writeFileSync("platforms/describe.md", code);
 console.log(`File platforms/describe.md was created`);

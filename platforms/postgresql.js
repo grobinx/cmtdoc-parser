@@ -253,7 +253,7 @@ code =
     ` * @example\n` +
     ` * select p.proname, ${functionName}(p.doc) as doc, p.arguments, p.description\n` +
     ` *   from (select p.proname, substring(pg_get_functiondef(p.oid) from '\\/\\*\\*.*\\*\\/') as doc, \n` +
-    ` *                coalesce(pg_get_function_arguments(p.oid), '') arguments,\n` +
+    ` *                coalesce(p.prosrc, '') arguments,\n` +
     ` *                d.description\n` +
     ` *           from pg_proc p\n` +
     ` *                join pg_namespace n on n.oid = p.pronamespace\n` +
