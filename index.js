@@ -147,7 +147,7 @@ exports.regexRules = [
                 "delimiter" : "|"
             },
             "name" : {
-                "name" : "members",
+                "name" : "names",
                 "delimiter" : "."
             }
         },
@@ -162,7 +162,7 @@ exports.regexRules = [
                         "object",
                         "json"
                     ],
-                    "members": [
+                    "names": [
                         "defaults"
                     ]
                 },
@@ -173,7 +173,7 @@ exports.regexRules = [
                     "types": [
                         "number"
                     ],
-                    "members": [
+                    "names": [
                         "defaults",
                         "players"
                     ]
@@ -185,7 +185,7 @@ exports.regexRules = [
                     "types": [
                         "number"
                     ],
-                    "members": [
+                    "names": [
                         "defaults",
                         "treasure",
                         "gold"
@@ -1651,7 +1651,7 @@ exports.regexRules = [
             "5": "name",
             "7": "description"
         },
-        used : ["js", "sql"],
+        used : ["sql"],
         expect: {
             "column": [
                 {
@@ -1678,11 +1678,38 @@ exports.regexRules = [
             "5": "name",
             "7": "description"
         },
-        used : ["js", "sql"],
+        used : ["sql"],
         expect: {
             "table": [
                 {
                     "type": "ordinary",
+                    "name": "users",
+                    "description": "user list with unique id, name and password"
+                },
+                {
+                    "name": "customers"
+                }
+            ]
+        }
+    },
+    {
+        figure : "@view {type} name [description]",
+        description : "Document using or define view.",
+        example : "@view {materialized} users user list with unique id, name and password\n@view customers",
+        match : new RegExp("@(view)" +reCurlyContent +"?" +rePathName +reDescription +"?", "g"),
+        name : "view",
+        object : "array",
+        type : "object",
+        captures: {
+            "3": "type",
+            "5": "name",
+            "7": "description"
+        },
+        used : ["sql"],
+        expect: {
+            "view": [
+                {
+                    "type": "materialized",
                     "name": "users",
                     "description": "user list with unique id, name and password"
                 },
@@ -1704,7 +1731,7 @@ exports.regexRules = [
             "3": "name",
             "5": "description"
         },
-        used : ["js", "sql"],
+        used : ["sql"],
         expect: {
             "sequence": [
                 {
@@ -1751,7 +1778,10 @@ function prepareComment(str) {
  * @function walk
  * @param {string} str document with or without comment chars around and inline 
  * @param {function} callback found doc figures
- * @param {json} [options={}]
+ * @param {json} [options={}] options
+ * 
+ * @property {string} options.use type of figure (js, sql, etc), if null process all
+ * 
  * @see describe()
  * @see parse()
  * @figure callback(regex, figure, matches)
@@ -1762,6 +1792,9 @@ exports.walk = function (str, callback, options = {}) {
     }
 
     for (let regex of exports.regexRules) {
+        if (options.use && !regex.used.include(options.use)) {
+            continue;
+        }
         let content = typeof str === "string" ? str : regex.example;
         const figure = {};
         const matches = [];
@@ -1861,7 +1894,9 @@ exports.walk = function (str, callback, options = {}) {
  * @param {string} str document with or without comment chars around and inline, if undefined then parse figure.example
  * @param {json} [options={}]
  * @returns {json} parsed structure
+ * 
  * @property {boolean} options.matches include matches in documentation structure
+ * 
  * @see describe()
  * @see walk()
  */

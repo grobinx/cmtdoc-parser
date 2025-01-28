@@ -90,6 +90,7 @@
 1. [\@test](#Figure-test)
 1. [\@column {type} name [description]](#Figure-column-type-name-description)
 1. [\@table {type} name [description]](#Figure-table-type-name-description)
+1. [\@view {type} name [description]](#Figure-view-type-name-description)
 1. [\@sequence|generator name [description]](#Figure-sequencegenerator-name-description)
 
 ## Figure This is root description
@@ -211,7 +212,7 @@ Result
 				"object",
 				"json"
 			],
-			"members": [
+			"names": [
 				"defaults"
 			]
 		},
@@ -222,7 +223,7 @@ Result
 			"types": [
 				"number"
 			],
-			"members": [
+			"names": [
 				"defaults",
 				"players"
 			]
@@ -234,7 +235,7 @@ Result
 			"types": [
 				"number"
 			],
-			"members": [
+			"names": [
 				"defaults",
 				"treasure",
 				"gold"
@@ -2077,7 +2078,7 @@ Result
 
 Document using or define column.
 
-Used in ["js","sql"]
+Used in ["sql"]
 
 Example
 
@@ -2107,7 +2108,7 @@ Result
 
 Document using or define table.
 
-Used in ["js","sql"]
+Used in ["sql"]
 
 Example
 
@@ -2133,11 +2134,41 @@ Result
 }
 ```
 
+## Figure \@view {type} name [description]
+
+Document using or define view.
+
+Used in ["sql"]
+
+Example
+
+```
+@view {materialized} users user list with unique id, name and password
+@view customers
+```
+
+Result
+
+```js
+{
+	"view": [
+		{
+			"type": "materialized",
+			"name": "users",
+			"description": "user list with unique id, name and password"
+		},
+		{
+			"name": "customers"
+		}
+	]
+}
+```
+
 ## Figure \@sequence|generator name [description]
 
 Document using or define unique sequence.
 
-Used in ["js","sql"]
+Used in ["sql"]
 
 Example
 
