@@ -20,7 +20,7 @@
 1. [\@access package|private|protected|public](#Figure-access-packageprivateprotectedpublic)
 1. [\@alias path [description]](#Figure-alias-path-description)
 1. [\@augments|extends path [description]](#Figure-augmentsextends-path-description)
-1. [\@author author [<email\@address>] [(http-page)] [- description]](#Figure-author-author-emailaddress-http-page---description)
+1. [\@author author [&lt;email\@address>] [(http-page)] [- description]](#Figure-author-author-emailaddress-http-page---description)
 1. [\@borrows thas_namepath as this_namepath [description]](#Figure-borrows-thas_namepath-as-this_namepath-description)
 1. [\@class|constructor [{type}] name](#Figure-classconstructor-type-name)
 1. [\@class|constructor](#Figure-classconstructor)
@@ -82,7 +82,7 @@
 1. [\@variation number](#Figure-variation-number)
 1. [\@version version](#Figure-version-version)
 1. [\@yield|yields|next [{type}] [description]](#Figure-yieldyieldsnext-type-description)
-1. [\@change|changed|changelog|modified [date] [<author>] [description]](#Figure-changechangedchangelogmodified-date-author-description)
+1. [\@change|changed|changelog|modified [date] [&lt;author>] [description]](#Figure-changechangedchangelogmodified-date-author-description)
 1. [\@isue some description](#Figure-isue-some-description)
 1. [\@figure|form name([parameters]) [description]](#Figure-figureform-nameparameters-description)
 1. [\@template [{type}] name[, name, ...] [- description]](#Figure-template-type-name,-name,-...---description)
@@ -551,7 +551,7 @@ Result
 }
 ```
 
-## Figure \@author author [<email\@address>] [(http-page)] [- description]
+## Figure \@author author [&lt;email\@address>] [(http-page)] [- description]
 
 Identify the author of an item.
 
@@ -1896,7 +1896,7 @@ Result
 }
 ```
 
-## Figure \@change|changed|changelog|modified [date] [<author>] [description]
+## Figure \@change|changed|changelog|modified [date] [&lt;author>] [description]
 
 Change log of object.
 

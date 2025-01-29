@@ -21,11 +21,11 @@ cmtDocParer.walk(undefined, (regex, figure, matches) => {
         tocCode += "\n";
     }
     tocCode += 
-      "1. [" +regex.figure.replaceAll("@", "\\@") +"]" +
+      "1. [" +regex.figure.replaceAll("@", "\\@").replace("<", "&lt;") +"]" +
       "(#" +("Figure " +regex.figure).replaceAll(/([\@\|\[\]\{\}\#\\\/\=\<\>\(\)])/g, "").replaceAll(/([\ ])/g, "-") +")";
     code += 
-        "## Figure " +regex.figure.replaceAll("@", "\\@") +"\n\n" +
-        regex.description +"\n\n" +
+        "## Figure " +regex.figure.replaceAll("@", "\\@").replace("<", "&lt;") +"\n\n" +
+        regex.description.replace("<", "&lt;") +"\n\n" +
         "Used in " +JSON.stringify(regex.used) +"\n\n" +
         "Example\n\n```\n" +regex.example +"\n```\n\n" +
         "Result\n\n```js\n" +JSON.stringify(figure, null, "\t") +"\n```";
