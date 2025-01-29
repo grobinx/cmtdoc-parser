@@ -1497,7 +1497,7 @@ exports.regexRules = [
         }
     },
     {
-        figure : "@change|changed|changelog|modified [date] [<author>] [description]",
+        figure : "@change|changed|changelog|modified [date|version] [<author>] [description]",
         forms : ["change", "changed", "changelog", "modified"],
         description : "Change log of object.",
         example : "@changed 2025-01-01 <Andrzej Kałuża> some description\n@changed <Andrzej Kałuża> some description\n@changed 2025-01-05 some description",
