@@ -727,7 +727,7 @@ exports.regexRules = [
         captures: {
             "2": "example"
         },
-        used : ["js"],
+        used : ["js", "sql"],
         expect: {
             "example": [
                 "// returns 2\nglobalNS.method1(5, 10);",
