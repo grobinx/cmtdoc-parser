@@ -253,6 +253,8 @@ code =
     ` * Function parse jsdoc and returns jsonb structure<br />\n` +
     ` * Function remove comment characters from string.\n` +
     ` * \n` +
+    ` * @summary parse doc from comment` +
+    ` * \n` +
     ` * @author cmtdoc parser (https://github.com/grobinx/cmtdoc-parser)\n` +
     ` * @created ${new Date().toString()}\n` +
     ` * @version ${version}\n` +

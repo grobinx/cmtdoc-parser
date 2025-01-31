@@ -1,0 +1,2014 @@
+h1. Describe js doc figures
+
+h2. Table of content
+
+# [[#Figure-This-is-root-description|This is root description]]
+# [[#Figure-paramargargument-type-namenamevalue-description|@param&#124;arg&#124;argument [{type}] name&#124;[name=value] [description]]]
+# [[#Figure-propertyprop-type-namenamevalue-description|@property&#124;prop [{type}] name&#124;[name=value] [description]]]
+# [[#Figure-async|@async]]
+# [[#Figure-generator|@generator]]
+# [[#Figure-global|@global]]
+# [[#Figure-hideconstructor|@hideconstructor]]
+# [[#Figure-ignore|@ignore]]
+# [[#Figure-inner|@inner]]
+# [[#Figure-instance|@instance]]
+# [[#Figure-override|@override]]
+# [[#Figure-public|@public]]
+# [[#Figure-readonly|@readonly]]
+# [[#Figure-static|@static]]
+# [[#Figure-abstractvirtual|@abstract&#124;virtual]]
+# [[#Figure-access-packageprivateprotectedpublic|@access package&#124;private&#124;protected&#124;public]]
+# [[#Figure-alias-path-description|@alias path [description]]]
+# [[#Figure-augmentsextends-path-description|@augments&#124;extends path [description]]]
+# [[#Figure-author-author-emailaddress-http-page---description|@author author [&lt;email@address&gt;] [(http-page)] [- description]]]
+# [[#Figure-borrows-thas_namepath-as-this_namepath-description|@borrows thas_namepath as this_namepath [description]]]
+# [[#Figure-classconstructor-type-name|@class&#124;constructor [{type}] name]]
+# [[#Figure-classconstructor|@class&#124;constructor]]
+# [[#Figure-constatntconst-type-name|@constatnt&#124;const {type} [name]]]
+# [[#Figure-constructs-name|@constructs name]]
+# [[#Figure-constructs|@constructs]]
+# [[#Figure-copyright-some-copyright-text|@copyright some copyright text]]
+# [[#Figure-defaultdefaultvalue-value|@default&#124;defaultvalue value]]
+# [[#Figure-defaultdefaultvalue|@default&#124;defaultvalue]]
+# [[#Figure-deprecated-some-text|@deprecated some text]]
+# [[#Figure-deprecated|@deprecated]]
+# [[#Figure-descriptiondescclassdesc-some-description|@description&#124;desc&#124;classdesc some description]]
+# [[#Figure-enum-type-name|@enum {type} [name]]]
+# [[#Figure-enum|@enum]]
+# [[#Figure-event-event_name|@event event_name]]
+# [[#Figure-example-multiline-example,-code,-comments,-etc|@example multiline example, code, comments, etc]]
+# [[#Figure-exports-name|@exports name]]
+# [[#Figure-externalhost-name_of_external|@external&#124;host name_of_external]]
+# [[#Figure-file-some-description|@file some description]]
+# [[#Figure-firesemits-event_name|@fires&#124;emits event_name]]
+# [[#Figure-functionfuncmethod-name|@function&#124;func&#124;method name]]
+# [[#Figure-functionfuncmethod|@function&#124;func&#124;method]]
+# [[#Figure-implements-type|@implements {type}]]
+# [[#Figure-interface-name|@interface name]]
+# [[#Figure-interface|@interface]]
+# [[#Figure-created-date|@created date]]
+# [[#Figure-kind-classconstanteventexternalfilefunctionmembermixinmodulenamespacetypedef|@kind class&#124;constant&#124;event&#124;external&#124;file&#124;function&#124;member&#124;mixin&#124;module&#124;namespace&#124;typedef]]
+# [[#Figure-lends-path|@lends path]]
+# [[#Figure-license-identifierstandalone-multiline-text|@license identifier&#124;standalone multiline text]]
+# [[#Figure-listens-event_name|@listens event_name]]
+# [[#Figure-membervarvariable-type-name|@member&#124;var&#124;variable {type} [name]]]
+# [[#Figure-memberof!-name|@memberof[!] name]]
+# [[#Figure-mixes-other_object_path|@mixes other_object_path]]
+# [[#Figure-mixin-name|@mixin name]]
+# [[#Figure-mixin|@mixin]]
+# [[#Figure-module-name|@module name]]
+# [[#Figure-module|@module]]
+# [[#Figure-namespace-name|@namespace name]]
+# [[#Figure-namespace|@namespace]]
+# [[#Figure-name-name|@name name]]
+# [[#Figure-package-type|@package {type}]]
+# [[#Figure-package-name|@package name]]
+# [[#Figure-package|@package]]
+# [[#Figure-private-type|@private {type}]]
+# [[#Figure-private|@private]]
+# [[#Figure-protected-type|@protected {type}]]
+# [[#Figure-protected|@protected]]
+# [[#Figure-requires-module_name|@requires module_name]]
+# [[#Figure-returnreturns-type-description|@return&#124;returns {type} [description]]]
+# [[#Figure-see-link-namepathnamepath-description|@see {@link namepath}&#124;namepath [description]]]
+# [[#Figure-since-version|@since version]]
+# [[#Figure-summary-description|@summary description]]
+# [[#Figure-this-namePath|@this namePath]]
+# [[#Figure-throwsexception-type-description|@throws&#124;exception {type} [description]]]
+# [[#Figure-todo-text-describing-thing-to-do.|@todo text describing thing to do.]]
+# [[#Figure-typedef-type-name|@typedef [{type}] name]]
+# [[#Figure-tutorial-link-pathname|@tutorial {@link path}&#124;name]]
+# [[#Figure-type-type|@type {type}]]
+# [[#Figure-variation-number|@variation number]]
+# [[#Figure-version-version|@version version]]
+# [[#Figure-yieldyieldsnext-type-description|@yield&#124;yields&#124;next [{type}] [description]]]
+# [[#Figure-changechangedchangelogmodified-dateversion-author-description|@change&#124;changed&#124;changelog&#124;modified [date&#124;version] [&lt;author&gt;] [description]]]
+# [[#Figure-isue-some-description|@isue some description]]
+# [[#Figure-figureform-nameparameters-description|@figure&#124;form name([parameters]) [description]]]
+# [[#Figure-template-type-name,-name,-...---description|@template [{type}] name[, name, ...] [- description]]]
+# [[#Figure-callback-name|@callback name]]
+# [[#Figure-test|@test]]
+# [[#Figure-column-type-name-description|@column {type} name [description]]]
+# [[#Figure-table-type-name-description|@table {type} name [description]]]
+# [[#Figure-view-type-name-description|@view {type} name [description]]]
+# [[#Figure-sequencegenerator-name-description|@sequence&#124;generator name [description]]]
+
+
+----
+
+
+h2. Figure This is root description
+
+Top of documentary comment content.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+JSDoc 3 is an API documentation generator for JavaScript,
+similar to Javadoc or phpDocumentor.
+You add documentation comments directly to your source code,
+right alongside the code itself.
+The JSDoc tool will scan your source code and generate an HTML documentation website for you.
+</pre>
+
+Result
+<pre>
+{
+	"root": "JSDoc 3 is an API documentation generator for JavaScript,\nsimilar to Javadoc or phpDocumentor.\nYou add documentation comments directly to your source code,\nright alongside the code itself.\nThe JSDoc tool will scan your source code and generate an HTML documentation website for you."
+}
+</pre>
+
+h2. Figure @param&#124;arg&#124;argument [{type}] name&#124;[name=value] [description]
+
+The @param tag provides the name, type, and description of a function parameter.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@param {string|any[]|*} aid
+@param {string} [alabel_text=abc] if the LABEL is to appear
+@param {attributes} alabel_attrs extra attributes for LABEL
+@param {attributes} aselect_attrs extra attribues for INPUT
+@arg {string=} somebody - Somebody's name.
+@param <V> the value of the element
+</pre>
+
+Result
+<pre>
+{
+	"param": [
+		{
+			"type": "string|any[]|*",
+			"name": "aid",
+			"types": [
+				"string",
+				"any[]",
+				"*"
+			]
+		},
+		{
+			"type": "string",
+			"name": "alabel_text",
+			"default": "abc",
+			"description": "if the LABEL is to appear",
+			"types": [
+				"string"
+			]
+		},
+		{
+			"type": "attributes",
+			"name": "alabel_attrs",
+			"description": "extra attributes for LABEL",
+			"types": [
+				"attributes"
+			]
+		},
+		{
+			"type": "attributes",
+			"name": "aselect_attrs",
+			"description": "extra attribues for INPUT",
+			"types": [
+				"attributes"
+			]
+		},
+		{
+			"type": "string=",
+			"name": "somebody",
+			"description": "- Somebody's name.",
+			"types": [
+				"string="
+			]
+		}
+	]
+}
+</pre>
+
+h2. Figure @property&#124;prop [{type}] name&#124;[name=value] [description]
+
+The @property tag is a way to easily document a list of static properties of a class, namespace or other object.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@property {object|json} defaults The default values for parties.
+@prop {number} defaults.players The default number of players.
+@property {number} defaults.treasure.gold How much gold the party starts with.
+</pre>
+
+Result
+<pre>
+{
+	"property": [
+		{
+			"type": "object|json",
+			"name": "defaults",
+			"description": "The default values for parties.",
+			"types": [
+				"object",
+				"json"
+			],
+			"names": [
+				"defaults"
+			]
+		},
+		{
+			"type": "number",
+			"name": "defaults.players",
+			"description": "The default number of players.",
+			"types": [
+				"number"
+			],
+			"names": [
+				"defaults",
+				"players"
+			]
+		},
+		{
+			"type": "number",
+			"name": "defaults.treasure.gold",
+			"description": "How much gold the party starts with.",
+			"types": [
+				"number"
+			],
+			"names": [
+				"defaults",
+				"treasure",
+				"gold"
+			]
+		}
+	]
+}
+</pre>
+
+h2. Figure @async
+
+The @async tag indicates that a function is asynchronous, meaning that it was declared using the syntax async function foo() {}. Do not use this tag for other types of asynchronous functions, such as functions that provide a callback.
+
+Used in ["js"]
+
+Example
+<pre>
+@async
+</pre>
+
+Result
+<pre>
+{
+	"async": true
+}
+</pre>
+
+h2. Figure @generator
+
+The @generator tag indicates that a function is a generator function, meaning that it was declared using the syntax function* foo() {}.
+
+Used in ["js"]
+
+Example
+<pre>
+@generator
+</pre>
+
+Result
+<pre>
+{
+	"generator": true
+}
+</pre>
+
+h2. Figure @global
+
+The @global tag specifies that a symbol should appear in the documentation as a global symbol. JSDoc ignores the symbol's actual scope within the source file. This tag is especially useful for symbols that are defined locally, then assigned to a global symbol.
+
+Used in ["js"]
+
+Example
+<pre>
+@global
+</pre>
+
+Result
+<pre>
+{
+	"global": true
+}
+</pre>
+
+h2. Figure @hideconstructor
+
+The @hideconstructor tag tells JSDoc that the generated documentation should not display the constructor for a class.
+
+Used in ["js"]
+
+Example
+<pre>
+@hideconstructor
+</pre>
+
+Result
+<pre>
+{
+	"hideconstructor": true
+}
+</pre>
+
+h2. Figure @ignore
+
+The @ignore tag indicates that a symbol in your code should never appear in the documentation. This tag takes precedence over all others.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@ignore
+</pre>
+
+Result
+<pre>
+{
+	"ignore": true
+}
+</pre>
+
+h2. Figure @inner
+
+Using the @inner tag will mark a symbol as an inner member of its parent symbol. This means it can be referred to by "Parent~Child".
+
+Used in ["js"]
+
+Example
+<pre>
+@inner
+</pre>
+
+Result
+<pre>
+{
+	"inner": true
+}
+</pre>
+
+h2. Figure @instance
+
+Using the @instance tag will mark a symbol as an instance member of its parent symbol. This means it can be referred to by "Parent#Child".
+
+Used in ["js"]
+
+Example
+<pre>
+@instance
+</pre>
+
+Result
+<pre>
+{
+	"instance": true
+}
+</pre>
+
+h2. Figure @override
+
+The @override tag indicates that a symbol overrides a symbol with the same name in a parent class.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@override
+</pre>
+
+Result
+<pre>
+{
+	"override": true
+}
+</pre>
+
+h2. Figure @public
+
+The @public tag indicates that a symbol should be documented as if it were public.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@public
+</pre>
+
+Result
+<pre>
+{
+	"public": true
+}
+</pre>
+
+h2. Figure @readonly
+
+The @readonly tag indicates that a symbol is intended to be read-only. Note this is for the purpose of documentation only.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@readonly
+</pre>
+
+Result
+<pre>
+{
+	"readonly": true
+}
+</pre>
+
+h2. Figure @static
+
+The @static tag indicates that a symbol is contained within a parent and can be accessed without instantiating the parent.
+
+Used in ["js"]
+
+Example
+<pre>
+@static
+</pre>
+
+Result
+<pre>
+{
+	"static": true
+}
+</pre>
+
+h2. Figure @abstract&#124;virtual
+
+This member must be implemented (or overridden) by the inheritor.
+
+Used in ["js"]
+
+Example
+<pre>
+@abstract
+</pre>
+
+Result
+<pre>
+{
+	"abstract": true
+}
+</pre>
+
+h2. Figure @access package&#124;private&#124;protected&#124;public
+
+Specify the access level of this member (private, package-private, public, or protected).
+
+Used in ["js"]
+
+Example
+<pre>
+@access package
+</pre>
+
+Result
+<pre>
+{
+	"access": "package"
+}
+</pre>
+
+h2. Figure @alias path [description]
+
+Treat a member as if it had a different name.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@alias trackr.CookieManager
+</pre>
+
+Result
+<pre>
+{
+	"alias": {
+		"path": "trackr.CookieManager"
+	}
+}
+</pre>
+
+h2. Figure @augments&#124;extends path [description]
+
+Indicate that a symbol inherits from, and adds to, a parent symbol.
+
+Used in ["js"]
+
+Example
+<pre>
+@augments Animal
+</pre>
+
+Result
+<pre>
+{
+	"augments": [
+		{
+			"path": "Animal"
+		}
+	]
+}
+</pre>
+
+h2. Figure @author author [&lt;email@address&gt;] [(http-page)] [- description]
+
+Identify the author of an item.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@author Andrzej Kałuża <aaa@server.pl> (http:\page)
+@author Juliusz Cezar - I down't now way
+</pre>
+
+Result
+<pre>
+{
+	"author": [
+		{
+			"author": "Andrzej Kałuża",
+			"email": "aaa@server.pl",
+			"page": "http:\\page"
+		},
+		{
+			"author": "Juliusz Cezar",
+			"description": "I down't now way"
+		}
+	]
+}
+</pre>
+
+h2. Figure @borrows thas_namepath as this_namepath [description]
+
+This object uses something from another object.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@borrows trim as myTrime
+</pre>
+
+Result
+<pre>
+{
+	"borrows": {
+		"that": "trim",
+		"this": "myTrime"
+	}
+}
+</pre>
+
+h2. Figure @class&#124;constructor [{type}] name
+
+This function is intended to be called with the "new" keyword.
+
+Used in ["js"]
+
+Example
+<pre>
+@class {Person} Human
+</pre>
+
+Result
+<pre>
+{
+	"class": {
+		"type": "Person",
+		"name": "Human"
+	}
+}
+</pre>
+
+h2. Figure @class&#124;constructor
+
+This function is intended to be called with the "new" keyword.
+
+Used in ["js"]
+
+Example
+<pre>
+@class
+</pre>
+
+Result
+<pre>
+{
+	"class": true
+}
+</pre>
+
+h2. Figure @constatnt&#124;const {type} [name]
+
+The @constant tag is used to mark the documentation as belonging to a symbol that is a constant.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@constant {number}
+</pre>
+
+Result
+<pre>
+{
+	"constant": {
+		"type": "number"
+	}
+}
+</pre>
+
+h2. Figure @constructs name
+
+This function member will be the constructor for the previous class.
+
+Used in ["js"]
+
+Example
+<pre>
+@constructs Menu
+</pre>
+
+Result
+<pre>
+{
+	"constructs": "Menu"
+}
+</pre>
+
+h2. Figure @constructs
+
+This function member will be the constructor for the previous class.
+
+Used in ["js"]
+
+Example
+<pre>
+@constructs
+</pre>
+
+Result
+<pre>
+{
+	"constructs": true
+}
+</pre>
+
+h2. Figure @copyright some copyright text
+
+Document some copyright information.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@copyright Andrzej Kałuża 2025
+</pre>
+
+Result
+<pre>
+{
+	"copyright": "Andrzej Kałuża 2025"
+}
+</pre>
+
+h2. Figure @default&#124;defaultvalue value
+
+Document the default value.
+
+Used in ["js"]
+
+Example
+<pre>
+@default 'Ex25622'
+</pre>
+
+Result
+<pre>
+{
+	"default": "'Ex25622'"
+}
+</pre>
+
+h2. Figure @default&#124;defaultvalue
+
+Document the default.
+
+Used in ["js"]
+
+Example
+<pre>
+@default
+</pre>
+
+Result
+<pre>
+{
+	"default": true
+}
+</pre>
+
+h2. Figure @deprecated some text
+
+Document that this is no longer the preferred way.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@deprecated since version 2.0 use other function
+</pre>
+
+Result
+<pre>
+{
+	"deprecated": "since version 2.0 use other function"
+}
+</pre>
+
+h2. Figure @deprecated
+
+Document that this is no longer the preferred way.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@deprecated
+</pre>
+
+Result
+<pre>
+{
+	"deprecated": true
+}
+</pre>
+
+h2. Figure @description&#124;desc&#124;classdesc some description
+
+Describe a symbol.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@description Add two numbers.
+</pre>
+
+Result
+<pre>
+{
+	"description": [
+		"Add two numbers."
+	]
+}
+</pre>
+
+h2. Figure @enum {type} [name]
+
+Document a collection of related properties.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@enum {number}
+</pre>
+
+Result
+<pre>
+{
+	"enum": {
+		"type": "number"
+	}
+}
+</pre>
+
+h2. Figure @enum
+
+Document a collection of related properties.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@enum
+</pre>
+
+Result
+<pre>
+{
+	"enum": true
+}
+</pre>
+
+h2. Figure @event event_name
+
+Document an event.
+
+Used in ["js"]
+
+Example
+<pre>
+@event Hurl#snowball
+</pre>
+
+Result
+<pre>
+{
+	"event": [
+		"Hurl#snowball"
+	]
+}
+</pre>
+
+h2. Figure @example multiline example, code, comments, etc
+
+Provide an example of how to use a documented item.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+ @example
+// returns 2
+globalNS.method1(5, 10);
+@example
+// returns 3
+globalNS.method(5, 15);
+</pre>
+
+Result
+<pre>
+{
+	"example": [
+		"// returns 2\nglobalNS.method1(5, 10);",
+		"// returns 3\nglobalNS.method(5, 15);"
+	]
+}
+</pre>
+
+h2. Figure @exports name
+
+Identify the member that is exported module.
+
+Used in ["js"]
+
+Example
+<pre>
+@exports Privare
+</pre>
+
+Result
+<pre>
+{
+	"exports": "Privare"
+}
+</pre>
+
+h2. Figure @external&#124;host name_of_external
+
+Identifies an external class, namespace, or module.
+
+Used in ["js"]
+
+Example
+<pre>
+@external "jQuery.fn"
+</pre>
+
+Result
+<pre>
+{
+	"external": "\"jQuery.fn\""
+}
+</pre>
+
+h2. Figure @file some description
+
+Describe a file.
+
+Used in ["js"]
+
+Example
+<pre>
+@file Manages the configuration settings for the widget.
+</pre>
+
+Result
+<pre>
+{
+	"file": "Manages the configuration settings for the widget."
+}
+</pre>
+
+h2. Figure @fires&#124;emits event_name
+
+Describe the events this method may fire.
+
+Used in ["js"]
+
+Example
+<pre>
+@fires Milkshake#drain
+</pre>
+
+Result
+<pre>
+{
+	"event": [
+		"Milkshake#drain"
+	]
+}
+</pre>
+
+h2. Figure @function&#124;func&#124;method name
+
+Describe a function or method.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@function myFunction
+</pre>
+
+Result
+<pre>
+{
+	"function": "myFunction"
+}
+</pre>
+
+h2. Figure @function&#124;func&#124;method
+
+Set a function or method.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@function
+</pre>
+
+Result
+<pre>
+{
+	"function": true
+}
+</pre>
+
+h2. Figure @implements {type}
+
+This symbol implements an interface.
+
+Used in ["js"]
+
+Example
+<pre>
+@implements {Color}
+</pre>
+
+Result
+<pre>
+{
+	"implements": "Color"
+}
+</pre>
+
+h2. Figure @interface name
+
+This symbol is an interface that others can implement.
+
+Used in ["js"]
+
+Example
+<pre>
+@interface Color
+</pre>
+
+Result
+<pre>
+{
+	"interface": "Color"
+}
+</pre>
+
+h2. Figure @interface
+
+Set as interface that others can implement.
+
+Used in ["js"]
+
+Example
+<pre>
+@interface
+</pre>
+
+Result
+<pre>
+{
+	"interface": true
+}
+</pre>
+
+h2. Figure @created date
+
+Date creation
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@created 2025-01-17
+</pre>
+
+Result
+<pre>
+{
+	"created": "2025-01-17"
+}
+</pre>
+
+h2. Figure @kind class&#124;constant&#124;event&#124;external&#124;file&#124;function&#124;member&#124;mixin&#124;module&#124;namespace&#124;typedef
+
+What kind of symbol is this?
+
+Used in ["js"]
+
+Example
+<pre>
+@kind class
+</pre>
+
+Result
+<pre>
+{
+	"kind": "class"
+}
+</pre>
+
+h2. Figure @lends path
+
+Document properties on an object literal as if they belonged to a symbol with a given name.
+
+Used in ["js"]
+
+Example
+<pre>
+@lends Person.prototype
+</pre>
+
+Result
+<pre>
+{
+	"lends": "Person.prototype"
+}
+</pre>
+
+h2. Figure @license identifier&#124;standalone multiline text
+
+Identify the license that applies to this code.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@license
+The MIT License is a permissive software license originating at the Massachusetts Institute of Technology (MIT)[6] in the late 1980s.[7] As a permissive license, it puts very few restrictions on reuse and therefore has high license compatibility.[8][9]
+Unlike copyleft software licenses, the MIT License also permits reuse within proprietary software, provided that all copies of the software or its substantial portions include a copy of the terms of the MIT License and also a copyright notice.[9][10] In 2015, the MIT License was the most popular software license on GitHub,[11] and was still the most popular in 2024.[12]
+Notable projects that use the MIT License include the X Window System, Ruby on Rails, Node.js, Lua, jQuery, .NET, Angular, and React. 
+</pre>
+
+Result
+<pre>
+{
+	"license": "The MIT License is a permissive software license originating at the Massachusetts Institute of Technology (MIT)[6] in the late 1980s.[7] As a permissive license, it puts very few restrictions on reuse and therefore has high license compatibility.[8][9]\nUnlike copyleft software licenses, the MIT License also permits reuse within proprietary software, provided that all copies of the software or its substantial portions include a copy of the terms of the MIT License and also a copyright notice.[9][10] In 2015, the MIT License was the most popular software license on GitHub,[11] and was still the most popular in 2024.[12]\nNotable projects that use the MIT License include the X Window System, Ruby on Rails, Node.js, Lua, jQuery, .NET, Angular, and React."
+}
+</pre>
+
+h2. Figure @listens event_name
+
+List the events that a symbol listens for.
+
+Used in ["js"]
+
+Example
+<pre>
+@listens module:hurler~event:snowball
+</pre>
+
+Result
+<pre>
+{
+	"listens": [
+		"module:hurler~event:snowball"
+	]
+}
+</pre>
+
+h2. Figure @member&#124;var&#124;variable {type} [name]
+
+Document a member.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@var {string} regexRule
+</pre>
+
+Result
+<pre>
+{
+	"variable": {
+		"type": "string",
+		"name": "regexRule"
+	}
+}
+</pre>
+
+h2. Figure @memberof[!] name
+
+This symbol belongs to a parent symbol.
+
+Used in ["js"]
+
+Example
+<pre>
+@memberof Tools
+</pre>
+
+Result
+<pre>
+{
+	"memberof": "Tools"
+}
+</pre>
+
+h2. Figure @mixes other_object_path
+
+This object mixes in all the members from another object.
+
+Used in ["js"]
+
+Example
+<pre>
+@mixes Eventful
+</pre>
+
+Result
+<pre>
+{
+	"mixes": "Eventful"
+}
+</pre>
+
+h2. Figure @mixin name
+
+Document a mixin object.
+
+Used in ["js"]
+
+Example
+<pre>
+@mixin Future
+</pre>
+
+Result
+<pre>
+{
+	"mixin": "Future"
+}
+</pre>
+
+h2. Figure @mixin
+
+Document a mixin object.
+
+Used in ["js"]
+
+Example
+<pre>
+@mixin
+</pre>
+
+Result
+<pre>
+{
+	"mixin": true
+}
+</pre>
+
+h2. Figure @module name
+
+Document a module.
+
+Used in ["js"]
+
+Example
+<pre>
+@module MyModule
+</pre>
+
+Result
+<pre>
+{
+	"module": "MyModule"
+}
+</pre>
+
+h2. Figure @module
+
+Document a module.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@module
+</pre>
+
+Result
+<pre>
+{
+	"module": true
+}
+</pre>
+
+h2. Figure @namespace name
+
+Document a namespace object.
+
+Used in ["js"]
+
+Example
+<pre>
+@namespace MyNamespace
+</pre>
+
+Result
+<pre>
+{
+	"namespace": "MyNamespace"
+}
+</pre>
+
+h2. Figure @namespace
+
+Set a namespace object.
+
+Used in ["js"]
+
+Example
+<pre>
+@namespace
+</pre>
+
+Result
+<pre>
+{
+	"namespace": true
+}
+</pre>
+
+h2. Figure @name name
+
+Document the name of an object.
+
+Used in ["js"]
+
+Example
+<pre>
+@name highlightSearchTerm
+</pre>
+
+Result
+<pre>
+{
+	"name": "highlightSearchTerm"
+}
+</pre>
+
+h2. Figure @package {type}
+
+This symbol is meant to be package-private or named.
+
+Used in ["js"]
+
+Example
+<pre>
+@package {MyPackage}
+</pre>
+
+Result
+<pre>
+{
+	"package": "MyPackage"
+}
+</pre>
+
+h2. Figure @package name
+
+This symbol is meant to be package-private or named.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@package MyPackage
+</pre>
+
+Result
+<pre>
+{
+	"package": "MyPackage"
+}
+</pre>
+
+h2. Figure @package
+
+This symbol is meant to be package-private.
+
+Used in ["js"]
+
+Example
+<pre>
+@package
+</pre>
+
+Result
+<pre>
+{
+	"package": true
+}
+</pre>
+
+h2. Figure @private {type}
+
+This symbol is meant to be private.
+
+Used in ["js"]
+
+Example
+<pre>
+@private {integer}
+</pre>
+
+Result
+<pre>
+{
+	"private": "integer"
+}
+</pre>
+
+h2. Figure @private
+
+This symbol is meant to be private.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@private
+</pre>
+
+Result
+<pre>
+{
+	"private": true
+}
+</pre>
+
+h2. Figure @protected {type}
+
+This symbol is meant to be protected.
+
+Used in ["js"]
+
+Example
+<pre>
+@protected {Number}
+</pre>
+
+Result
+<pre>
+{
+	"protected": "Number"
+}
+</pre>
+
+h2. Figure @protected
+
+This symbol is meant to be protected.
+
+Used in ["js"]
+
+Example
+<pre>
+@protected
+</pre>
+
+Result
+<pre>
+{
+	"protected": true
+}
+</pre>
+
+h2. Figure @requires module_name
+
+This file requires a module or other object, file.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@requires module:xyzcorp/helper
+@requires xyzcorp/helper.ShinyWidget#polish
+</pre>
+
+Result
+<pre>
+{
+	"requires": [
+		"module:xyzcorp/helper",
+		"xyzcorp/helper.ShinyWidget#polish"
+	]
+}
+</pre>
+
+h2. Figure @return&#124;returns {type} [description]
+
+Document the return value of a function.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@returns {number} Sum of a and b
+</pre>
+
+Result
+<pre>
+{
+	"returns": {
+		"type": "number",
+		"description": "Sum of a and b",
+		"types": [
+			"number"
+		]
+	}
+}
+</pre>
+
+h2. Figure @see {@link namepath}&#124;namepath [description]
+
+Refer to some other documentation for more information.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@see {@link bar}
+@see bar
+@see {@link foo} for further information.
+@see {@link http://github.com|GitHub}
+@see package.Class#method
+</pre>
+
+Result
+<pre>
+{
+	"see": [
+		{
+			"path": "@link bar"
+		},
+		{
+			"path": "bar"
+		},
+		{
+			"path": "@link foo",
+			"description": "for further information."
+		},
+		{
+			"path": "@link http://github.com|GitHub"
+		},
+		{
+			"path": "package.Class#method"
+		}
+	]
+}
+</pre>
+
+h2. Figure @since version
+
+When was this feature added?
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@since 1.0.1
+</pre>
+
+Result
+<pre>
+{
+	"since": "1.0.1"
+}
+</pre>
+
+h2. Figure @summary description
+
+A shorter version of the full description.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@summary A concise summary.
+</pre>
+
+Result
+<pre>
+{
+	"summary": "A concise summary."
+}
+</pre>
+
+h2. Figure @this namePath
+
+What does the 'this' keyword refer to here?
+
+Used in ["js"]
+
+Example
+<pre>
+@this Greeter
+</pre>
+
+Result
+<pre>
+{
+	"this": "Greeter"
+}
+</pre>
+
+h2. Figure @throws&#124;exception {type} [description]
+
+Describe what errors could be thrown.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@throws {InvalidArgumentException}
+@throws Will throw an error if the argument is null.
+@throws {DivideByZero} Argument x must be non-zero.
+</pre>
+
+Result
+<pre>
+{
+	"throws": [
+		{
+			"type": "InvalidArgumentException"
+		},
+		{
+			"description": "Will throw an error if the argument is null."
+		},
+		{
+			"type": "DivideByZero",
+			"description": "Argument x must be non-zero."
+		}
+	]
+}
+</pre>
+
+h2. Figure @todo text describing thing to do.
+
+Document tasks to be completed.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@todo Write the documentation.
+@todo Implement this function.
+</pre>
+
+Result
+<pre>
+{
+	"todo": [
+		"Write the documentation.",
+		"Implement this function."
+	]
+}
+</pre>
+
+h2. Figure @typedef [{type}] name
+
+Document a custom type.
+
+Used in ["js"]
+
+Example
+<pre>
+@typedef {(number|string)} NumberLike
+@typedef {Object} WishGranter~Triforce
+</pre>
+
+Result
+<pre>
+{
+	"typedef": {
+		"type": "Object",
+		"name": "WishGranter~Triforce"
+	}
+}
+</pre>
+
+h2. Figure @tutorial {@link path}&#124;name
+
+Insert a link to an included tutorial file.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@tutorial tutorial-1
+@tutorial {@link index.js}
+</pre>
+
+Result
+<pre>
+{
+	"tutorial": [
+		"tutorial-1",
+		"@link index.js"
+	]
+}
+</pre>
+
+h2. Figure @type {type}
+
+Document the type of an object.
+
+Used in ["js"]
+
+Example
+<pre>
+@type {Array.<string>}
+@type {number}
+</pre>
+
+Result
+<pre>
+{
+	"type": "number"
+}
+</pre>
+
+h2. Figure @variation number
+
+Distinguish different objects with the same name.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@variation 2
+</pre>
+
+Result
+<pre>
+{
+	"variation": "2"
+}
+</pre>
+
+h2. Figure @version version
+
+Documents the version number of an item.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@version 1.0.45
+@version 0.0.1 Beta
+</pre>
+
+Result
+<pre>
+{
+	"version": "0.0.1 Beta"
+}
+</pre>
+
+h2. Figure @yield&#124;yields&#124;next [{type}] [description]
+
+Document the value yielded by a generator function.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@yields {number}
+@yields {number} The next number in the Fibonacci sequence.]
+</pre>
+
+Result
+<pre>
+{
+	"yield": {
+		"type": "number",
+		"description": "The next number in the Fibonacci sequence.]"
+	}
+}
+</pre>
+
+h2. Figure @change&#124;changed&#124;changelog&#124;modified [date&#124;version] [&lt;author&gt;] [description]
+
+Change log of object.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@changed 2025-01-01 <Andrzej Kałuża> some description
+@changed <Andrzej Kałuża> some description
+@changed 2025-01-05 some description
+</pre>
+
+Result
+<pre>
+{
+	"change": [
+		{
+			"date": "2025-01-01",
+			"author": "Andrzej Kałuża",
+			"description": "some description"
+		},
+		{
+			"author": "Andrzej Kałuża",
+			"description": "some description"
+		},
+		{
+			"date": "2025-01-05",
+			"description": "some description"
+		}
+	]
+}
+</pre>
+
+h2. Figure @isue some description
+
+Describes the know problem in the code.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@isue sometimes returns null
+@isue link not work
+</pre>
+
+Result
+<pre>
+{
+	"isue": [
+		"sometimes returns null",
+		"link not work"
+	]
+}
+</pre>
+
+h2. Figure @figure&#124;form name([parameters]) [description]
+
+Document function form.
+
+Used in ["js"]
+
+Example
+<pre>
+@figure getData() returns all data as array
+@figure getData(options) returns all data as array
+@figure getData(uniqueId | index | object related with row, options) returns row data as JSON
+</pre>
+
+Result
+<pre>
+{
+	"figure": [
+		{
+			"figure": "getData()",
+			"description": "returns all data as array"
+		},
+		{
+			"figure": "getData(options)",
+			"description": "returns all data as array"
+		},
+		{
+			"figure": "getData(uniqueId | index | object related with row, options)",
+			"description": "returns row data as JSON"
+		}
+	]
+}
+</pre>
+
+h2. Figure @template [{type}] name[, name, ...] [- description]
+
+Document class templates and his type.
+
+Used in ["js"]
+
+Example
+<pre>
+@template {String} K - K must be a string or string literal
+@template K, V, Z
+</pre>
+
+Result
+<pre>
+{
+	"template": [
+		{
+			"type": "String",
+			"name": "K",
+			"description": "K must be a string or string literal",
+			"types": [
+				"String"
+			],
+			"names": [
+				"K"
+			]
+		},
+		{
+			"name": "K, V, Z",
+			"names": [
+				"K",
+				"V",
+				"Z"
+			]
+		}
+	]
+}
+</pre>
+
+h2. Figure @callback name
+
+Document callback function.
+
+Used in ["js"]
+
+Example
+<pre>
+@callback Predicate
+</pre>
+
+Result
+<pre>
+{
+	"callback": [
+		"Predicate"
+	]
+}
+</pre>
+
+h2. Figure @test
+
+This symbol indicates that the function is test or testing.
+
+Used in ["js","sql"]
+
+Example
+<pre>
+@test
+</pre>
+
+Result
+<pre>
+{
+	"test": true
+}
+</pre>
+
+h2. Figure @column {type} name [description]
+
+Document using or define column.
+
+Used in ["sql"]
+
+Example
+<pre>
+@column {varchar} uniqueid unique id
+@column users.name
+</pre>
+
+Result
+<pre>
+{
+	"column": [
+		{
+			"type": "varchar",
+			"name": "uniqueid",
+			"description": "unique id"
+		},
+		{
+			"name": "users.name"
+		}
+	]
+}
+</pre>
+
+h2. Figure @table {type} name [description]
+
+Document using or define table.
+
+Used in ["sql"]
+
+Example
+<pre>
+@table {ordinary} users user list with unique id, name and password
+@table customers
+</pre>
+
+Result
+<pre>
+{
+	"table": [
+		{
+			"type": "ordinary",
+			"name": "users",
+			"description": "user list with unique id, name and password"
+		},
+		{
+			"name": "customers"
+		}
+	]
+}
+</pre>
+
+h2. Figure @view {type} name [description]
+
+Document using or define view.
+
+Used in ["sql"]
+
+Example
+<pre>
+@view {materialized} users user list with unique id, name and password
+@view customers
+</pre>
+
+Result
+<pre>
+{
+	"view": [
+		{
+			"type": "materialized",
+			"name": "users",
+			"description": "user list with unique id, name and password"
+		},
+		{
+			"name": "customers"
+		}
+	]
+}
+</pre>
+
+h2. Figure @sequence&#124;generator name [description]
+
+Document using or define unique sequence.
+
+Used in ["sql"]
+
+Example
+<pre>
+@sequence users_id_seq user unique id generator
+</pre>
+
+Result
+<pre>
+{
+	"sequence": [
+		{
+			"name": "users_id_seq",
+			"description": "user unique id generator"
+		}
+	]
+}
+</pre>
